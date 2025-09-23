@@ -18,10 +18,10 @@
   }
 
   .h1-box {
-    display: inline-block; /* shrink-wrap around h1 */
-    background-color: rgba(255, 255, 255, 0.89); /* semi-transparent black */
-    padding: 5px 20px; /* space inside the rectangle */
-    border-radius: 30px; /* rounded corners */
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.89);
+    padding: 10px 30px;
+    border-radius: 30px;
   }
 
   .h1-box p {

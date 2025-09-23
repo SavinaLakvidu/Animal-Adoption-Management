@@ -9,9 +9,8 @@
   .footer-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
-    margin: auto;
+    justify-items: center;
+    text-align: center;
   }
   
   .footer-logo {
