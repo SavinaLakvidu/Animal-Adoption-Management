@@ -16,6 +16,17 @@
     font-size: 48px;
     margin-bottom: 20px;
   }
+
+  .h1-box {
+    display: inline-block; /* shrink-wrap around h1 */
+    background-color: rgba(255, 255, 255, 0.89); /* semi-transparent black */
+    padding: 5px 20px; /* space inside the rectangle */
+    border-radius: 15px; /* rounded corners */
+  }
+
+  .h1-box p {
+    color: black;
+  }
   
   .home-hero p {
     font-size: 24px;

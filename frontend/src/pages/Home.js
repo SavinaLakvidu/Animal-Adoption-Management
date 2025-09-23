@@ -6,8 +6,11 @@ function Home() {
   return (
     <div className="home-container">
       <header className="home-hero">
-        <h1>Welcome to Pawfect</h1>
-        <p>Find your perfect furry friend today!</p>
+        <div class="h1-box">
+          <h1>Welcome to Pawfect</h1>
+          <p>Find your perfect furry friend today!</p>
+        </div>
+        <p></p>
         <Link to="/pet-adoption" className="btn-primary">Adopt Now</Link>
       </header>
 
