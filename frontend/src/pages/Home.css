@@ -1,0 +1,51 @@
+/* src/pages/Home.css */
+.home-container {
+    font-family: Arial, sans-serif;
+  }
+  
+  .home-hero {
+    text-align: center;
+    background-image: url("https://placedog.net/1200/400");
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 20px;
+  }
+  
+  .home-hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+  }
+  
+  .home-hero p {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+  
+  .btn-primary {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  .btn-primary:hover {
+    background-color: #ff3b3b;
+  }
+  
+  .home-info {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 50px 20px;
+  }
+  
+  .info-box {
+    background: #f2f2f2;
+    padding: 25px;
+    border-radius: 8px;
+    flex: 1;
+    text-align: center;
+  }
+  
