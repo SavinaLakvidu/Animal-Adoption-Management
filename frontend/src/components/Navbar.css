@@ -2,6 +2,7 @@
 .navbar-header {
     width: 100%;
     background-color: #800020; /* wine red */
+    font-family: Arial, sans-serif;
     box-shadow: 0 4px 6px rgba(0,0,0,0.15);
     position: sticky;
     top: 0;
@@ -10,9 +11,7 @@
   
   /* Container */
   .navbar-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 10px 20px;
+    padding: 20px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -20,6 +19,7 @@
   
   /* Logo */
   .logo a {
+    padding-left: 10px;
     font-size: 28px;
     font-weight: bold;
     color: white;
@@ -28,9 +28,10 @@
   
   /* Navigation Menu */
   .nav-menu {
+    padding-right: 10px;
     display: flex;
-    align-items: center;
-    gap: 15px;
+    align-items: right;
+    gap: 25px;
   }
   
   /* Buttons */
