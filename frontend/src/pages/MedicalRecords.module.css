@@ -1,4 +1,4 @@
-.medical-records-container {
+.medicalRecordsContainer {
   width: 80%;
   max-width: 1200px;
   min-height: calc(100vh - 130px);
@@ -12,75 +12,74 @@
   flex-direction: column;
 }
 
-
-.medical-records-container h1 {
-    text-align: center;
-    margin-bottom: 20px;
+.medicalRecordsContainer h1 {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.top-bar {
-    display: flex;
-    justify-content: flex-start;
-    gap: 15px;
-    margin-bottom: 20px;
+.topBar {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
-.top-bar .btn {
+.topBar .btn {
   text-decoration: none;
 }
 
 .btn {
-    background: #007bff;
-    color: white;
-    padding: 11px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
+  background: #007bff;
+  color: white;
+  padding: 11px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .btn:hover {
-    background: #0056b3;
+  background: #0056b3;
 }
 
-.btn-danger {
-    background: red;
-    padding: 10px 10px;
+.btnDanger {
+  background: red;
+  padding: 10px 10px;
 }
 
-.btn-edit {
-    margin-right: 10px;
-    padding: 10px 10px;
+.btnEdit {
+  margin-right: 10px;
+  padding: 10px 10px;
 }
 
-.btn-danger:hover {
-    background: darkred;
+.btnDanger:hover {
+  background: darkred;
 }
 
-.search-input {
-    display: block;       
-    width: 100%;          
-    padding: 10px;
-    margin: 0 0 20px 0;    
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box; 
+.searchInput {
+  display: block;       
+  width: 100%;          
+  padding: 10px;
+  margin: 0 0 20px 0;    
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box; 
 }
 
-.records-table {
-    width: 100%;
-    border-collapse: collapse;
+.recordsTable {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.records-table th,
-.records-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
+.recordsTable th,
+.recordsTable td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
 }
 
-.records-table th {
-    background: #f4f4f4;
+.recordsTable th {
+  background: #f4f4f4;
 }
 
 .overlay {
@@ -127,7 +126,7 @@
   font-family: Arial, sans-serif;
 }
 
-.modal .modal-buttons {
+.modalButtons {
   display: flex;
   justify-content: flex-end;  
   gap: 15px;                  
@@ -145,12 +144,12 @@
   opacity: 0.9;
 }
 
-.modal .btn-danger {
+.modal .btnDanger {
   background-color: #ff4d4d;
   color: white;
 }
 
-.modal .btn-danger:hover {
+.modal .btnDanger:hover {
   background-color: #cc0000;
 }
 
@@ -173,9 +172,3 @@
   outline: none;
   border-color: #007bff;
 }
-
-
-
-
-
-

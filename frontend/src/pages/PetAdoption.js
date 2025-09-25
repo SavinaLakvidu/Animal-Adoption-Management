@@ -1,114 +1,55 @@
-import React, { useState, useEffect } from "react";
-import "./PetAdoption.css";
+import { useEffect, useState } from "react";
+import API from "../services/api";
 
 function PetAdoption() {
   const [pets, setPets] = useState([]);
-  const [speciesFilter, setSpeciesFilter] = useState("All");
-  const [breedFilter, setBreedFilter] = useState("All");
   const [search, setSearch] = useState("");
-  const [selectedPet, setSelectedPet] = useState(null);
 
-  // Fetch pets from backend
   useEffect(() => {
-    async function fetchPets() {
-      try {
-        const response = await fetch("http://localhost:5000/api/pets"); // replace with your backend route
-        const data = await response.json();
-        setPets(data);
-      } catch (err) {
-        console.error("Error fetching pets:", err);
-      }
-    }
-    fetchPets();
+    API.get("/pet-profiles")
+      .then((res) => setPets(Array.isArray(res.data) ? res.data : []))
+      .catch((err) => console.error(err));
   }, []);
 
-  // Get unique breeds dynamically based on selected species
-  const breeds = [
-    "All",
-    ...new Set(
-      pets
-        .filter(p => speciesFilter === "All" || p.petSpecies === speciesFilter)
-        .map(p => p.petBreed)
-    ),
-  ];
-
-  const filteredPets = pets.filter(
-    pet =>
-      (speciesFilter === "All" || pet.petSpecies === speciesFilter) &&
-      (breedFilter === "All" || pet.petBreed === breedFilter) &&
-      (pet.petName.toLowerCase().includes(search.toLowerCase()) ||
-       pet.petBreed.toLowerCase().includes(search.toLowerCase()))
-  );
+  const filteredPets = (pets || []).filter((pet) => {
+    const q = (search ?? "").toString().toLowerCase();
+    return (
+      (pet?.petName ?? "").toString().toLowerCase().includes(q) ||
+      (pet?.petBreed ?? "").toString().toLowerCase().includes(q) ||
+      (pet?.petSpecies ?? "").toString().toLowerCase().includes(q)
+    );
+  });
 
   return (
-    <div className="pet-adoption-container">
+    <div style={{ width: "90%", maxWidth: 1200, margin: "30px auto" }}>
       <h1>Pet Adoption</h1>
-
-      {/* Filters */}
-      <div className="filter-bar">
-        <select
-          value={speciesFilter}
-          onChange={e => {
-            setSpeciesFilter(e.target.value);
-            setBreedFilter("All");
-          }}
-        >
-          <option value="All">All Species</option>
-          <option value="Dog">Dogs</option>
-          <option value="Cat">Cats</option>
-        </select>
-
-        <select value={breedFilter} onChange={e => setBreedFilter(e.target.value)}>
-          {breeds.map(b => (
-            <option key={b} value={b}>{b}</option>
-          ))}
-        </select>
-
-        <input
-          type="text"
-          placeholder="Search by name or breed..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
-      </div>
-
-      {/* Pet cards */}
-      <div className="pet-cards">
+      <input
+        type="text"
+        placeholder="Search by name, breed or species"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={{ width: "100%", padding: 10, margin: "10px 0 20px", borderRadius: 6, border: "1px solid #ccc" }}
+      />
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
         {filteredPets.length > 0 ? (
-          filteredPets.map(pet => (
-            <div className="pet-card" key={pet._id}>
-              <img src={pet.imageUrl} alt={pet.petName} />
-              <h2>{pet.petName}</h2>
-              <p><strong>Species:</strong> {pet.petSpecies}</p>
-              <p><strong>Breed:</strong> {pet.petBreed}</p>
-              <p><strong>Age:</strong> {pet.petAge} years</p>
-              <button className="btn adopt-btn" onClick={() => setSelectedPet(pet)}>View Details</button>
+          filteredPets.map((pet) => (
+            <div key={pet._id} style={{ background: "#fff", borderRadius: 8, padding: 12, boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+              <div style={{ fontWeight: 600 }}>{pet.petName}</div>
+              <div><strong>Species:</strong> {pet.petSpecies}</div>
+              <div><strong>Breed:</strong> {pet.petBreed}</div>
+              <div><strong>Age:</strong> {pet.petAge}</div>
+              <div style={{ marginTop: 8, color: "#555" }}>{pet.petDescription}</div>
             </div>
           ))
         ) : (
-          <p className="no-pets">No pets found</p>
+          <div>No pets found</div>
         )}
       </div>
-
-      {/* Modal */}
-      {selectedPet && (
-        <div className="modal-overlay" onClick={() => setSelectedPet(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <h2>{selectedPet.petName}</h2>
-            <img src={selectedPet.imageUrl} alt={selectedPet.petName} />
-            <p><strong>Species:</strong> {selectedPet.petSpecies}</p>
-            <p><strong>Breed:</strong> {selectedPet.petBreed}</p>
-            <p><strong>Age:</strong> {selectedPet.petAge} years</p>
-            <p><strong>Description:</strong> {selectedPet.petDescription}</p>
-            <p><strong>Behavior:</strong> {selectedPet.petBehavior}</p>
-            <p><strong>Medical:</strong> {selectedPet.petMedical}</p>
-            <button className="btn adopt-btn">Adopt Me</button>
-            <button className="btn close-btn" onClick={() => setSelectedPet(null)}>Close</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
 export default PetAdoption;
+
+
+

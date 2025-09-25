@@ -35,3 +35,55 @@ export const confirmRescuedPet = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Update rescued pet
+export const updateRescuedPet = async (req, res) => {
+  try {
+    const updated = await RescuedPet.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!updated) return res.status(404).json({ message: "Pet not found" });
+    res.status(200).json(updated);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// Delete rescued pet
+export const deleteRescuedPet = async (req, res) => {
+  try {
+    const deleted = await RescuedPet.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: "Pet not found" });
+    res.status(200).json({ message: "Pet deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update rescued pet by rescuedPetId (business identifier)
+export const updateRescuedPetByCode = async (req, res) => {
+  try {
+    const updated = await RescuedPet.findOneAndUpdate(
+      { rescuedPetId: req.params.code },
+      req.body,
+      { new: true, runValidators: true }
+    );
+    if (!updated) return res.status(404).json({ message: "Pet not found" });
+    res.status(200).json(updated);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// Delete rescued pet by rescuedPetId (business identifier)
+export const deleteRescuedPetByCode = async (req, res) => {
+  try {
+    const deleted = await RescuedPet.findOneAndDelete({ rescuedPetId: req.params.code });
+    if (!deleted) return res.status(404).json({ message: "Pet not found" });
+    res.status(200).json({ message: "Pet deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

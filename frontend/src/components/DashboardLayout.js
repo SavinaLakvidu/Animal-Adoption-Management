@@ -1,24 +1,24 @@
 // src/components/DashboardLayout.js
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
-import "./DashboardLayout.css";
+import styles from "./DashboardLayout.module.css";
 
 function DashboardLayout() {
   return (
-    <div className="dashboard-container">
+    <div className={styles.dashboardContainer}>
       {/* Sidebar */}
-      <aside className="dashboard-sidebar">
-        <h2 className="sidebar-title">Dashboard</h2>
-        <nav className="sidebar-menu">
-          <Link to="/dashboard" className="sidebar-link">Overview</Link>
-          <Link to="/dashboard/donations" className="sidebar-link">Donation History</Link>
-          <Link to="/dashboard/pet-listing" className="sidebar-link">Pet Listing</Link>
-          <Link to="/dashboard/medical-records" className="sidebar-link">Medical Records</Link>
+      <aside className={styles.dashboardSidebar}>
+        <h2 className={styles.sidebarTitle}>Dashboard</h2>
+        <nav className={styles.sidebarMenu}>
+          <Link to="/dashboard" className={styles.sidebarLink}>Overview</Link>
+          <Link to="/dashboard/donations" className={styles.sidebarLink}>Donation History</Link>
+          <Link to="/dashboard/pet-listing" className={styles.sidebarLink}>Pet Listing</Link>
+          <Link to="/dashboard/medical-records" className={styles.sidebarLink}>Medical Records</Link>
         </nav>
       </aside>
 
       {/* Main Content */}
-      <main className="dashboard-content">
+      <main className={styles.dashboardContent}>
         <Outlet />
       </main>
     </div>

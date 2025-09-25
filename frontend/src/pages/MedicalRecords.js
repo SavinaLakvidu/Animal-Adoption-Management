@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 import Modal from "react-modal";
-import "./MedicalRecords.css";
+import styles from "./MedicalRecords.module.css";
 import { Link } from "react-router-dom";
-import jsPDF from "jspdf";            
-import autoTable from "jspdf-autotable";             
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 Modal.setAppElement("#root");
 
@@ -48,7 +48,6 @@ function MedicalRecords() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const newRecord = {
         mid: formData.mid,
@@ -57,9 +56,7 @@ function MedicalRecords() {
         age: Number(formData.age),
         petId: formData.petId,
       };
-
       const res = await API.post("/medical-records", newRecord);
-
       setRecords([...records, res.data.record]);
       setIsModalOpen(false);
       setFormData({ mid: "", dueDate: "", vaccination: "", age: "", petId: "" });
@@ -71,7 +68,6 @@ function MedicalRecords() {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const updatedRecord = {
         dueDate: editData.dueDate,
@@ -79,9 +75,7 @@ function MedicalRecords() {
         age: Number(editData.age),
         petId: editData.petId,
       };
-
       const res = await API.put(`/medical-records/${editData.mid}`, updatedRecord);
-
       setRecords(
         records.map((r) => (r.mid === editData.mid ? res.data.record : r))
       );
@@ -93,34 +87,31 @@ function MedicalRecords() {
     }
   };
 
-const downloadReport = () => {
-  const doc = new jsPDF();
+  const downloadReport = () => {
+    const doc = new jsPDF();
+    doc.text("Medical Records Report", 14, 20);
+    const tableColumn = ["MID", "Due Date", "Vaccination", "Age", "Pet ID"];
+    const tableRows = [];
 
-  doc.text("Medical Records Report", 14, 20);
+    records.forEach((r) => {
+      const rowData = [
+        r.mid,
+        new Date(r.dueDate).toISOString().split("T")[0],
+        r.vaccination,
+        r.age,
+        r.petId,
+      ];
+      tableRows.push(rowData);
+    });
 
-  const tableColumn = ["MID", "Due Date", "Vaccination", "Age", "Pet ID"];
-  const tableRows = [];
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+    });
 
-  records.forEach((r) => {
-    const rowData = [
-      r.mid,
-      new Date(r.dueDate).toISOString().split("T")[0],
-      r.vaccination,
-      r.age,
-      r.petId,
-    ];
-    tableRows.push(rowData);
-  });
-
-  autoTable(doc, {
-    head: [tableColumn],
-    body: tableRows,
-    startY: 30,
-  });
-
-  doc.save("medical_records.pdf");
-};
-
+    doc.save("medical_records.pdf");
+  };
 
   const filteredRecords = records.filter(
     (r) =>
@@ -129,15 +120,15 @@ const downloadReport = () => {
   );
 
   return (
-    <div className="medical-records-container">
+    <div className={styles.medicalRecordsContainer}>
       <h1>Medical Records</h1>
 
-      <div className="top-bar">
-        <button className="btn" onClick={() => setIsModalOpen(true)}>
+      <div className={styles.topBar}>
+        <button className={styles.btn} onClick={() => setIsModalOpen(true)}>
           Create New
         </button>
-        <Link className="btn" to="/appointment">Appointment Scheduling</Link>
-        <button className="btn" onClick={downloadReport}>
+        <Link className={styles.btn} to="/appointment">Appointment Scheduling</Link>
+        <button className={styles.btn} onClick={downloadReport}>
           Download Report
         </button>
       </div>
@@ -147,9 +138,10 @@ const downloadReport = () => {
         placeholder="Search by MID, Pet ID"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="search-input"
+        className={styles.searchInput}
       />
-      <table className="records-table">
+
+      <table className={styles.recordsTable}>
         <thead>
           <tr>
             <th>MID</th>
@@ -170,8 +162,16 @@ const downloadReport = () => {
                 <td>{r.age}</td>
                 <td>{r.petId}</td>
                 <td>
-                  <button className="btn btn-edit" onClick={() => openEditModal(r)}>Edit</button>
-                  <button className="btn btn-danger" onClick={() => deleteRecord(r.mid)}>
+                  <button
+                    className={`${styles.btn} ${styles.btnEdit}`}
+                    onClick={() => openEditModal(r)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className={`${styles.btn} ${styles.btnDanger}`}
+                    onClick={() => deleteRecord(r.mid)}
+                  >
                     Delete
                   </button>
                 </td>
@@ -179,7 +179,7 @@ const downloadReport = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="no-records">
+              <td colSpan="6" className={styles.noRecords}>
                 No records found
               </td>
             </tr>
@@ -187,12 +187,13 @@ const downloadReport = () => {
         </tbody>
       </table>
 
+      {/* Create Modal */}
       <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
         contentLabel="Create New Medical Record"
-        className="modal"
-        overlayClassName="overlay"
+        className={styles.modal}
+        overlayClassName={styles.overlay}
       >
         <h2>Create New Medical Record</h2>
         <form onSubmit={handleSubmit}>
@@ -235,23 +236,26 @@ const downloadReport = () => {
             onChange={handleChange}
             required
           />
-          <div className="modal-buttons">
-            <button type="submit" className="btn">
-              Submit
-            </button>
-            <button type="button" className="btn btn-danger" onClick={() => setIsModalOpen(false)}>
+          <div className={styles.modalButtons}>
+            <button type="submit" className={styles.btn}>Submit</button>
+            <button
+              type="button"
+              className={`${styles.btn} ${styles.btnDanger}`}
+              onClick={() => setIsModalOpen(false)}
+            >
               Cancel
             </button>
           </div>
         </form>
       </Modal>
 
+      {/* Edit Modal */}
       <Modal
         isOpen={isEditModalOpen}
         onRequestClose={() => setIsEditModalOpen(false)}
         contentLabel="Edit Medical Record"
-        className="modal"
-        overlayClassName="overlay"
+        className={styles.modal}
+        overlayClassName={styles.overlay}
       >
         <h2>Edit Medical Record</h2>
         {editData && (
@@ -286,9 +290,13 @@ const downloadReport = () => {
               onChange={(e) => setEditData({ ...editData, petId: e.target.value })}
               required
             />
-            <div className="modal-buttons">
-              <button type="submit" className="btn">Update</button>
-              <button type="button" className="btn btn-danger" onClick={() => setIsEditModalOpen(false)}>
+            <div className={styles.modalButtons}>
+              <button type="submit" className={styles.btn}>Update</button>
+              <button
+                type="button"
+                className={`${styles.btn} ${styles.btnDanger}`}
+                onClick={() => setIsEditModalOpen(false)}
+              >
                 Cancel
               </button>
             </div>

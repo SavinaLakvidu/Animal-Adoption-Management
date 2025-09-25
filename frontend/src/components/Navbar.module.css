@@ -1,0 +1,100 @@
+/* Navbar background */
+.customNavbar {
+  background-color: #722f37; /* wine red */
+}
+
+/* Brand */
+.navbarBrand {
+  font-weight: bold;
+  font-size: 2rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.05em;
+}
+
+/* Nav links & dropdowns */
+.navLink,
+.dropdownToggle {
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+/* Hover effects */
+.navLinkHover,
+.dropdownToggleHover {
+  color: #ffdde1 !important;
+}
+
+/* Active link */
+.activeLink {
+  color: #ffdde1 !important;
+  font-weight: 700;
+}
+
+/* Dropdown menu */
+.dropdownMenu {
+  background-color: #722f37;
+  border: none;
+}
+
+.dropdownItem {
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 10px 20px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.dropdownItemHover {
+  background-color: #501f28;
+  color: #ffdde1;
+}
+
+/* Navbar toggler */
+.navbarToggler {
+  border-color: #ffdde1;
+}
+
+.navbarTogglerIcon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 221, 225, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Dropdown arrow */
+.dropdownToggleAfter {
+  margin-left: 6px;
+  vertical-align: middle;
+  border-top: 0.35em solid #fff;
+  border-right: 0.35em solid transparent;
+  border-left: 0.35em solid transparent;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .navbarBrand {
+    font-size: 1.6rem;
+  }
+
+  .navLink,
+  .dropdownItem {
+    font-size: 1rem;
+  }
+
+  .navItem {
+    margin: 5px 0;
+  }
+
+  .dropdownMenu {
+    position: static;
+    float: none;
+  }
+}
+
+/* Optional: Add icon spacing */
+.navLinkSvg {
+  margin-right: 5px;
+}

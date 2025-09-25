@@ -1,0 +1,59 @@
+/* DashboardLayout.module.css */
+.adminContainer {
+    display: flex;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    height: 500%;
+    background-color: #8c1e2f;
+    color: white;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.sidebarLogo {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 20px;
+}
+
+.sidebarMenu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebarMenuItem {
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.sidebarMenuItem:hover {
+    background-color: #a33243;
+}
+
+.sidebarMenuItemActive {
+    background-color: #a33243;
+    border-left: 4px solid #fff;
+}
+
+/* Main Content Area Styling */
+.mainContent {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+@media (min-width: 768px) {
+    .mainContent {
+        margin-left: 250px;
+    }
+}

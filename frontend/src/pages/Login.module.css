@@ -1,0 +1,120 @@
+/* Login.module.css */
+
+/* Container centers the form vertically and horizontally */
+.loginContainer {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #fdf2f2, #fde6e6);
+  font-family: 'Inter', sans-serif;
+  padding: 20px;
+}
+
+/* Form box */
+.loginForm {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(114, 47, 55, 0.2);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+/* Title */
+.loginTitle {
+  text-align: center;
+  color: #722F37;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
+
+/* Labels */
+.loginLabel {
+  display: block;
+  margin-bottom: 8px;
+  color: #4A1E24;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Inputs */
+.loginInput {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  border: 1.5px solid #ccc;
+  border-radius: 12px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.loginInput:focus {
+  border-color: #722F37;
+  box-shadow: 0 0 5px #722F37;
+}
+
+/* Password input wrapper for icon */
+.passwordWrapper {
+  position: relative;
+}
+
+.passwordInput {
+  padding-right: 40px;
+}
+
+/* Eye icon */
+.passwordToggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  cursor: pointer;
+  font-size: 1.25rem;
+  user-select: none;
+}
+
+.passwordToggle:hover {
+  color: #722F37;
+}
+
+/* Submit button */
+.loginButton {
+  width: 100%;
+  background-color: #722F37;
+  color: white;
+  padding: 14px 0;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.loginButton:hover {
+  background-color: #4A1E24;
+}
+
+/* Footer text */
+.loginFooter {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Register link */
+.loginRegisterLink {
+  color: #722F37;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.loginRegisterLink:hover {
+  text-decoration: underline;
+}

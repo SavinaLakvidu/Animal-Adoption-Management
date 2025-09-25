@@ -1,92 +1,91 @@
 import mongoose from "mongoose";
-import cloudinary from "cloudinary";
-
-// ✅ Configure Cloudinary
-cloudinary.config({
-  cloud_name: "YOUR_CLOUD_NAME",
-  api_key: "YOUR_API_KEY",
-  api_secret: "YOUR_API_SECRET",
-});
 
 const petProfileSchema = new mongoose.Schema(
   {
+    // Pet ID: required, unique, max length 20, species-aware pattern (C-xxx | D-xxx)
+    petId: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      maxlength: 20,
+      validate: {
+        validator: function (value) {
+          if (!value) return false;
+          const species = this.petSpecies; // access sibling field
+          // Base pattern: Single letter prefix + dash + digits (e.g., C-001 or D-045)
+          const match = /^([A-Za-z])-\d{1,17}$/; // keep total <= 20
+          const res = match.exec(value);
+          if (!res) return false;
+          const prefix = res[1].toUpperCase();
+          if (species === "Cat") return prefix === "C";
+          if (species === "Dog") return prefix === "D";
+          return false;
+        },
+        message:
+          "Invalid Pet ID: Cats must start with 'C-' and Dogs with 'D-'. Use letters+dash+digits like C-001",
+      },
+    },
+    // Name: 2–50 chars, letters/spaces/hyphens only
     petName: {
       type: String,
       required: true,
       trim: true,
+      minlength: 2,
+      maxlength: 50,
+      match: [/^[A-Za-z\s-]+$/, "Name can contain only letters, spaces and hyphens"],
     },
+    // Species: only Cat or Dog
     petSpecies: {
       type: String,
       required: true,
       enum: ["Dog", "Cat"],
     },
+    // Breed: 2–50 chars, letters/spaces/hyphens
     petBreed: {
       type: String,
       trim: true,
+      minlength: 2,
+      maxlength: 50,
+      match: [/^[A-Za-z\s-]+$/, "Breed can contain only letters, spaces and hyphens"],
     },
+    // Age: > 0, upper bound 30 years
     petAge: {
       type: Number,
-      min: 0,
+      min: 0.0000001,
+      max: 30,
+      required: true,
     },
     petGender: {
       type: String,
       enum: ["Male", "Female"],
+      required: true,
     },
     petStatus: {
       type: String,
       enum: ["Available", "Adopted", "Pending"],
       default: "Available",
+      required: true,
     },
     petOwnerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    // Description: 10–500 chars
     petDescription: {
       type: String,
       required: true,
       trim: true,
+      minlength: 10,
+      maxlength: 500,
     },
-    imageUrl: {
-      type: String,
-      required: true,
-      default: "", // will be set dynamically
-    },
+    // imageUrl removed per requirements
   },
   {
     timestamps: true,
   }
 );
 
-// ✅ Pre-save middleware
-petProfileSchema.pre("save", async function (next) {
-  try {
-    // If imageUrl is already set (user uploaded) → skip
-    if (this.imageUrl) return next();
-
-    // Assign a random image based on species
-    const dogImages = [
-      "https://res.cloudinary.com/demo/image/upload/dog1.jpg",
-      "https://res.cloudinary.com/demo/image/upload/dog2.jpg",
-      "https://res.cloudinary.com/demo/image/upload/dog3.jpg",
-    ];
-    const catImages = [
-      "https://res.cloudinary.com/demo/image/upload/cat1.jpg",
-      "https://res.cloudinary.com/demo/image/upload/cat2.jpg",
-      "https://res.cloudinary.com/demo/image/upload/cat3.jpg",
-    ];
-
-    if (this.petSpecies === "Dog") {
-      this.imageUrl = dogImages[Math.floor(Math.random() * dogImages.length)];
-    } else if (this.petSpecies === "Cat") {
-      this.imageUrl = catImages[Math.floor(Math.random() * catImages.length)];
-    } else {
-      this.imageUrl = "https://placehold.co/600x400?text=Pet+Image";
-    }
-
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
+// imageUrl hook removed
 
 export default mongoose.model("PetProfile", petProfileSchema);

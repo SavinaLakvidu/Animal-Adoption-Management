@@ -1,27 +1,76 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import "./Navbar.css";
+import { Navbar, Nav, Container } from "react-bootstrap";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FaHome, FaUserPlus, FaDonate, FaHandsHelping, FaPaw, FaUserCircle } from "react-icons/fa";
+import styles from "./Navbar.module.css";
+import { useAuth } from "../context/AuthContext";
 
-function Navbar() {
+function NavigationBar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { isLoggedIn, user, logout } = useAuth();
+
+  const role = (user?.role || "").toUpperCase();
+  const isAdmin = role === "ADMIN";
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+  const isRegisterPage = location.pathname === "/register";
+  const isLoginPage = location.pathname === "/login";
+
   return (
-    <header className="navbar-header">
-      <div className="navbar-container">
-        <div className="logo">
-          <Link to="/">Pawfect Home</Link>
-        </div>
-        <nav className="nav-menu">
-          <Link className="nav-btn" to="/">Home</Link>
-          <Link className="nav-btn" to="/petshop">Pet Shop</Link>
-          <Link className="nav-btn" to="/pet-adoption">All Pets</Link>
-          <Link className="nav-btn" to="/pet-adoption?filter=Dog">Dogs</Link>
-          <Link className="nav-btn" to="/pet-adoption?filter=Cat">Cats</Link>
-          <Link className="nav-btn" to="/medical-records">Medical Records</Link>
-          <Link className="nav-btn" to="/login">Login</Link>
-          <Link className="nav-btn" to="/dashboard">Dashboard</Link>
-        </nav>
-      </div>
-    </header>
+    <Navbar expand="lg" variant="dark" className={`${styles.customNavbar} py-3`} sticky="top">
+      <Container fluid>
+        <Navbar.Brand as={Link} to="/" className={`d-flex align-items-center me-5 ${styles.brand}`}>
+          <FaHome className="me-2" />
+          <span className={styles.brandText}>Pawfect Home</span>
+        </Navbar.Brand>
+
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className={`ms-auto align-items-center ${styles.navContainer}`}>
+            <Nav.Link as={Link} to="/products" className={`mx-3 ${styles.navItem}`}>Pet Shop</Nav.Link>
+            <Nav.Link as={Link} to="/rescued-pet" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+              <FaPaw className="me-1" /> Rescued Pets
+            </Nav.Link>
+            <Nav.Link as={Link} to="/pet-profiles" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+              <FaPaw className="me-1" /> All Pets
+            </Nav.Link>
+
+            {isAdmin && (
+              <Nav.Link as={Link} to="/admin" className={`mx-3 ${styles.navItem}`}>Dashboard</Nav.Link>
+            )}
+
+            <Nav.Link as={Link} to="/donations" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+              <FaDonate className="me-1" /> Donate
+            </Nav.Link>
+            <Nav.Link as={Link} to="/volunteering" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+              <FaHandsHelping className="me-1" /> Volunteer
+            </Nav.Link>
+
+            {!isLoggedIn && !isRegisterPage && (
+              <Nav.Link as={Link} to="/register" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+                <FaUserPlus className="me-1" /> Register
+              </Nav.Link>
+            )}
+
+            {!isLoggedIn && !isLoginPage && (
+              <Nav.Link as={Link} to="/login" className={`mx-3 ${styles.navItem}`}>Login</Nav.Link>
+            )}
+
+            {isLoggedIn && (
+              <Nav.Link onClick={handleLogout} className={`d-flex align-items-center mx-3 ${styles.navItem}`} style={{ cursor: "pointer" }}>
+                <FaUserCircle className="me-1" /> Logout
+              </Nav.Link>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }
 
-export default Navbar;
+export default NavigationBar;

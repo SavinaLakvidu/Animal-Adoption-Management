@@ -1,43 +1,114 @@
-import { createUserService } from "../service/UserService.js";
-import User from "../model/user.js";
+import {
+  registerUserService,
+  loginUserService,
+  logoutUserService,
+  updateUserService,
+  forgotPasswordService,
+  verifyEmailService,
+  uploadAvatarService,
+  verifyForgotPasswordOtpService,
+} from "../service/UserService.js";
 
-// Register new user
-export const createUserController = async (req, res) => {
-  console.log("POST /users/register body:", req.body);
+export async function registerUserController(req, res) {
   try {
-    const { userDob, userName, userEmail, userAddress, userPhone, userPassword, role } = req.body;
+    const savedUser = await registerUserService(req.body);
 
-    // Check required fields
-    if (!userDob || !userName || !userEmail || !userAddress || !userPhone || !userPassword) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
+    const { accessToken } = await loginUserService({
+      email: req.body.email,
+      password: req.body.password,
+    });
 
-    // Check if email already exists
-    const existingUser = await User.findOne({ userEmail });
-    if (existingUser) {
-      return res.status(409).json({ message: "Email is already registered" });
-    }
-
-    // Create user via service
-    const newUser = await createUserService({ userDob, userName, userEmail, userAddress, userPhone, userPassword, role });
-
-    res.status(201).json({ message: "User registered successfully", user: newUser });
-
-  } catch (err) {
-    console.error("Error creating user:", err.message);
-    res.status(500).json({ message: err.message });
+    return res.status(201).json({
+      message: "User registered successfully.",
+      user: savedUser,
+      token: accessToken,
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: error.message,
+      error: true,
+      success: false,
+    });
   }
-};
+}
 
-// Get all users (for testing/admin)
-export const getAllUsers = async (req, res) => {
+// LOGIN
+export async function loginController(req, res) {
   try {
-    const users = await User.find().select("-userPassword"); // exclude passwords
-    if (!users || users.length === 0) {
-      return res.status(404).json({ message: "No users found" });
-    }
-    res.status(200).json(users);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const { user, accessToken, refreshToken } = await loginUserService(req.body);
+
+    const isProd = process.env.NODE_ENV === "production";
+    res.cookie("accessToken", accessToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "None" : "Lax" });
+    res.cookie("refreshToken", refreshToken, { httpOnly: true, secure: isProd, sameSite: isProd ? "None" : "Lax" });
+
+    return res.status(200).json({ message: "User logged in successfully", data: { user, accessToken, refreshToken }, error: false, success: true });
+  } catch (error) {
+    return res.status(400).json({ message: error.message, error: true, success: false });
   }
-};
+}
+
+// LOGOUT
+export async function logoutController(req, res) {
+  try {
+    await logoutUserService(req.userId);
+
+    res.clearCookie("accessToken", { httpOnly: true, secure: true, sameSite: "None" });
+    res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: "None" });
+
+    return res.status(200).json({ message: "User logged out successfully", error: false, success: true });
+  } catch (error) {
+    return res.status(400).json({ message: error.message, error: true, success: false });
+  }
+}
+
+// UPDATE USER
+export async function updateUserDetails(req, res) {
+  try {
+    const updatedUser = await updateUserService(req.userId, req.body);
+    return res.json({ message: "User updated successfully", data: updatedUser, error: false, success: true });
+  } catch (error) {
+    return res.status(400).json({ message: error.message, error: true, success: false });
+  }
+}
+
+// FORGOT PASSWORD
+export async function forgotPasswordController(req, res) {
+  try {
+    const otp = await forgotPasswordService(req.body.email);
+    return res.json({ message: "OTP sent successfully", otp, error: false, success: true });
+  } catch (error) {
+    return res.status(400).json({ message: error.message, error: true, success: false });
+  }
+}
+
+// VERIFY EMAIL
+export async function verifyEmailController(req, res) {
+  try {
+    await verifyEmailService(req.body.code);
+    return res.json({ message: "Email verified successfully", error: false, success: true });
+  } catch (error) {
+    return res.status(400).json({ message: error.message, error: true, success: false });
+  }
+}
+
+// UPLOAD AVATAR
+export async function uploadAvatarController(req, res) {
+  try {
+    const data = await uploadAvatarService(req.userId, req.file);
+    return res.json({ message: "Profile uploaded successfully", data, error: false, success: true });
+  } catch (error) {
+    return res.status(400).json({ message: error.message, error: true, success: false });
+  }
+}
+
+// VERIFY OTP (FORGOT PASSWORD)
+export async function verifyForgotPasswordOtpController(req, res) {
+  try {
+    await verifyForgotPasswordOtpService(req.body.email, req.body.otp);
+    return res.json({ message: "OTP verified successfully", error: false, success: true });
+  } catch (error) {
+    return res.status(400).json({ message: error.message, error: true, success: false });
+  }
+}

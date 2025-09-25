@@ -1,0 +1,139 @@
+/* Home.module.css */
+.homeContainer {
+  font-family: Arial, sans-serif;
+}
+
+/* Carousel caption overlay */
+.carouselCaption {
+  background-color: rgba(0, 0, 0, 0.65);
+  padding: 30px 40px;
+  border-radius: 15px;
+  max-width: 70%;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.carouselCaption h1,
+.carouselCaption h2 {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ffdde1;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  margin-bottom: 15px;
+}
+
+.carouselCaption p {
+  font-size: 1.5rem;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+.btnDanger {
+  background-color: #722f37;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btnDanger:hover {
+  background-color: #501f28;
+}
+
+/* Home info section */
+.homeInfo {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 50px 20px;
+  flex-wrap: wrap;
+}
+
+.infoBox {
+  background: #f2f2f2;
+  padding: 30px 25px;
+  border-radius: 12px;
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.infoBox h3 {
+  font-size: 1.8rem;
+  color: #722f37;
+  font-weight: bold;
+  margin-bottom: 12px;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.infoBox p {
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+/* Info box hover effects */
+.infoBox:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 15px 25px rgba(114, 47, 55, 0.4);
+  background-color: #fff0f2;
+}
+
+.infoBox:hover h3 {
+  color: #501f28;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.infoBox:hover p {
+  color: #722f37;
+}
+
+/* Rescued Pets info box */
+.infoBoxRescued {
+  background-color: #fdf2f4;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .carouselCaption {
+    max-width: 90%;
+    padding: 20px 25px;
+  }
+
+  .carouselCaption h1,
+  .carouselCaption h2 {
+    font-size: 2rem;
+  }
+
+  .carouselCaption p {
+    font-size: 1.2rem;
+  }
+
+  .btnDanger {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+
+  .infoBox {
+    min-width: 200px;
+    max-width: 90%;
+    padding: 20px;
+  }
+
+  .infoBox h3 {
+    font-size: 1.5rem;
+  }
+
+  .infoBox p {
+    font-size: 1rem;
+  }
+}

@@ -1,53 +1,105 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema(
   {
-    userID: { type: String, unique: true },
-    userDob: { type: Date, required: true },
-    userName: { type: String, required: true },
-    userEmail: { type: String, required: true, unique: true },
-    userAddress: { type: String, required: true },
-    userPhone: { type: String, required: true },
-    userPassword: { type: String, required: true },
-    role: { 
-      type: String, 
-      enum: ["guest", "adopter", "donor", "volunteer","vet"], 
-      default: "guest" 
-    }
+    // Auto-incrementing numeric userID
+    userID: {
+      type: String,
+      unique: true,
+      sparse: true, // allows existing docs without userID
+      index: true,
+    },
+    name: {
+      type: String,
+      required: [true, "Provide Name"],
+    },
+    email: {
+      type: String,
+      required: [true, "Provide Email"],
+      unique: true,
+      index: true, 
+    },
+    password: {
+      type: String,
+      required: [true, "Provide Password"],
+    },
+    avatar: {
+      type: String,
+      default: "",
+    },
+    mobile: {
+      type: Number, 
+      default: null,
+    },
+    forgot_password_otp: {
+      type: String,
+      default: null,
+    },
+    forgot_password_expiry: {
+      type: Date,
+      default: null, 
+    },
+    refresh_token: {
+      type: String,
+      default: "",
+    },
+    status: {
+      type: String,
+      default: "ACTIVE",
+      enum: ["ACTIVE", "INACTIVE"],
+    },
+    role: {
+      type: String,
+      default: "USER",
+      enum: ["USER", "STAFF", "ADMIN"],
+    },
+    verify_email: {
+      type: Boolean,
+      default: false,
+    },
+    last_login_date: {
+      type: Date,
+      default: null, 
+    },
+    address_details: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "address",
+      },
+    ],
+    orderhistory: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "order",
+      },
+    ],
+    shopping_cart: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "product",
+      },
+    ],
   },
   { timestamps: true }
 );
 
-// ✅ Auto-generate custom userID if not provided
-userSchema.pre("save", function(next) {
-  if (!this.userID) {
-    this.userID = `USER-${Date.now()}`;
+// Auto-increment userID using a counters collection
+// This runs only on new documents if userID is not already set
+userSchema.pre("save", async function (next) {
+  if (!this.isNew || this.userID != null) return next();
+  try {
+    const counters = this.$model ? this.$model("__dummy__").db.collection("counters") : mongoose.connection.collection("counters");
+    const result = await counters.findOneAndUpdate(
+      { _id: "users" },
+      { $inc: { seq: 1 } },
+      { upsert: true, returnDocument: "after" }
+    );
+    const seq = result?.value?.seq || 1;
+    this.userID = seq;
+    next();
+  } catch (err) {
+    next(err);
   }
-  next();
 });
 
-// ✅ Hash password before saving
-userSchema.pre("save", async function(next) {
-  if (!this.isModified("userPassword")) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.userPassword = await bcrypt.hash(this.userPassword, salt);
-  next();
-});
-
-// ✅ Password verification method
-userSchema.methods.comparePassword = async function(password) {
-  return await bcrypt.compare(password, this.userPassword);
-};
-
-// ✅ DOB validation
-userSchema.path("userDob").validate(function(value) {
-  return value < new Date();
-}, "Date of birth cannot be in the future.");
-
-// ✅ Email format validation
-userSchema.path("userEmail").validate(function(value) {
-  return /\S+@\S+\.\S+/.test(value);
-}, "Invalid email format.");
-
-export default mongoose.model("User", userSchema);
+export default mongoose.model("user", userSchema);

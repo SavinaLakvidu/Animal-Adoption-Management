@@ -1,17 +1,42 @@
-import express from "express";
-import { createUserController, getAllUsers } from "../controller/UserController.js";
-import { loginController } from "../controller/loginController.js";
-import { authenticate, authorizeRoles } from "../middleware/authMiddleware.js";
+import express from 'express';
+import {
+  forgotPasswordController,
+  loginController,
+  logoutController,
+  registerUserController,
+  updateUserDetails,
+  uploadAvatarController,
+  verifyEmailController,
+  verifyForgotPasswordOtpController, // include if you use it in routes
+} from '../controller/UserController.js';
 
-const router = express.Router();
+import auth from '../middleware/auth.js';   // authentication middleware
+import upload from '../middleware/upload.js'; // multer middleware for file uploads
 
-// Register
-router.post("/register", createUserController);
+const userRouter = express.Router();
+
+// Registration
+userRouter.post('/register', registerUserController);
 
 // Login
-router.post("/login", loginController);
+userRouter.post('/login', loginController);
 
-// Get all users (protected route, admin only)
-router.get("/", authenticate, authorizeRoles("admin"), getAllUsers);
+// Logout
+userRouter.get('/logout', auth, logoutController);
 
-export default router;
+// Update user details
+userRouter.put('/updateUser', auth, updateUserDetails);
+
+// Verify email
+userRouter.post('/verify-email', verifyEmailController);
+
+// Upload avatar
+userRouter.put('/upload-avatar', auth, upload.single('avatar'), uploadAvatarController);
+
+// Forgot password
+userRouter.post('/forgot-password', forgotPasswordController);
+
+// Verify OTP (forgot password)
+userRouter.post('/verify-otp', verifyForgotPasswordOtpController); // optional
+
+export default userRouter;
