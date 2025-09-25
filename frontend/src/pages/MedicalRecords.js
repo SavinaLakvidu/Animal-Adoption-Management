@@ -3,6 +3,8 @@ import API from "../services/api";
 import Modal from "react-modal";
 import "./MedicalRecords.css";
 import { Link } from "react-router-dom";
+import jsPDF from "jspdf";            
+import autoTable from "jspdf-autotable";             
 
 Modal.setAppElement("#root");
 
@@ -36,68 +38,95 @@ function MedicalRecords() {
   };
 
   const openEditModal = (record) => {
-  setEditData(record);
-  setIsEditModalOpen(true);
+    setEditData(record);
+    setIsEditModalOpen(true);
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const newRecord = {
-      mid: formData.mid,
-      dueDate: formData.dueDate,
-      vaccination: formData.vaccination,
-      age: Number(formData.age),
-      petId: formData.petId,
-    };
+    try {
+      const newRecord = {
+        mid: formData.mid,
+        dueDate: formData.dueDate,
+        vaccination: formData.vaccination,
+        age: Number(formData.age),
+        petId: formData.petId,
+      };
 
-    const res = await API.post("/medical-records", newRecord);
+      const res = await API.post("/medical-records", newRecord);
 
-    setRecords([...records, res.data.record]);
-    setIsModalOpen(false);
-    setFormData({ mid: "", dueDate: "", vaccination: "", age: "", petId: "" });
-  } catch (error) {
-    console.error(error);
-    alert("Error creating medical record");
-  }
+      setRecords([...records, res.data.record]);
+      setIsModalOpen(false);
+      setFormData({ mid: "", dueDate: "", vaccination: "", age: "", petId: "" });
+    } catch (error) {
+      console.error(error);
+      alert("Error creating medical record");
+    }
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const updatedRecord = {
+        dueDate: editData.dueDate,
+        vaccination: editData.vaccination,
+        age: Number(editData.age),
+        petId: editData.petId,
+      };
+
+      const res = await API.put(`/medical-records/${editData.mid}`, updatedRecord);
+
+      setRecords(
+        records.map((r) => (r.mid === editData.mid ? res.data.record : r))
+      );
+      setIsEditModalOpen(false);
+      setEditData(null);
+    } catch (error) {
+      console.error(error);
+      alert("Error updating medical record");
+    }
+  };
+
+const downloadReport = () => {
+  const doc = new jsPDF();
+
+  doc.text("Medical Records Report", 14, 20);
+
+  const tableColumn = ["MID", "Due Date", "Vaccination", "Age", "Pet ID"];
+  const tableRows = [];
+
+  records.forEach((r) => {
+    const rowData = [
+      r.mid,
+      new Date(r.dueDate).toISOString().split("T")[0],
+      r.vaccination,
+      r.age,
+      r.petId,
+    ];
+    tableRows.push(rowData);
+  });
+
+  autoTable(doc, {
+    head: [tableColumn],
+    body: tableRows,
+    startY: 30,
+  });
+
+  doc.save("medical_records.pdf");
 };
-const handleEditSubmit = async (e) => {
-  e.preventDefault();
-
-  try {
-    const updatedRecord = {
-      dueDate: editData.dueDate,
-      vaccination: editData.vaccination,
-      age: Number(editData.age),
-      petId: editData.petId,
-    };
-
-    const res = await API.put(`/medical-records/${editData.mid}`, updatedRecord);
-
-    setRecords(
-      records.map((r) => (r.mid === editData.mid ? res.data.record : r))
-    );
-    setIsEditModalOpen(false);
-    setEditData(null);
-  } catch (error) {
-    console.error(error);
-    alert("Error updating medical record");
-  }
-};
 
 
-
-const filteredRecords = records.filter(
-  (r) =>
-    r.mid.toLowerCase().includes(search.toLowerCase()) ||
-    (r.petId && r.petId.toLowerCase().includes(search.toLowerCase()))
-);
-
+  const filteredRecords = records.filter(
+    (r) =>
+      r.mid.toLowerCase().includes(search.toLowerCase()) ||
+      (r.petId && r.petId.toLowerCase().includes(search.toLowerCase()))
+  );
 
   return (
     <div className="medical-records-container">
@@ -108,6 +137,9 @@ const filteredRecords = records.filter(
           Create New
         </button>
         <Link className="btn" to="/appointment">Appointment Scheduling</Link>
+        <button className="btn" onClick={downloadReport}>
+          Download Report
+        </button>
       </div>
 
       <input
@@ -213,6 +245,7 @@ const filteredRecords = records.filter(
           </div>
         </form>
       </Modal>
+
       <Modal
         isOpen={isEditModalOpen}
         onRequestClose={() => setIsEditModalOpen(false)}
@@ -223,17 +256,12 @@ const filteredRecords = records.filter(
         <h2>Edit Medical Record</h2>
         {editData && (
           <form onSubmit={handleEditSubmit}>
-            <input
-              type="text"
-              name="mid"
-              value={editData.mid}
-              disabled
-            />
+            <input type="text" name="mid" value={editData.mid} disabled />
             <input
               type="date"
               name="dueDate"
               value={editData.dueDate ? new Date(editData.dueDate).toISOString().split("T")[0] : ""}
-              min={new Date().toISOString().split("T")[0]} 
+              min={new Date().toISOString().split("T")[0]}
               onChange={(e) => setEditData({ ...editData, dueDate: e.target.value })}
               required
             />
@@ -241,9 +269,7 @@ const filteredRecords = records.filter(
               type="text"
               name="vaccination"
               value={editData.vaccination}
-              onChange={(e) =>
-                setEditData({ ...editData, vaccination: e.target.value })
-              }
+              onChange={(e) => setEditData({ ...editData, vaccination: e.target.value })}
               required
             />
             <input
@@ -262,18 +288,13 @@ const filteredRecords = records.filter(
             />
             <div className="modal-buttons">
               <button type="submit" className="btn">Update</button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => setIsEditModalOpen(false)}
-              >
+              <button type="button" className="btn btn-danger" onClick={() => setIsEditModalOpen(false)}>
                 Cancel
               </button>
             </div>
           </form>
         )}
-    </Modal>
-
+      </Modal>
     </div>
   );
 }
