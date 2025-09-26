@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import API from '../api/API.js'; // updated import for centralized API
+import API from '../services/api.js'; // updated import for centralized API
 import styles from './admin.module.css';
 import { createClient } from "@supabase/supabase-js";
 import { Toast, ToastContainer } from 'react-bootstrap';
@@ -141,24 +141,11 @@ const Admin = () => {
 
   const handleEditProduct = (id) => {
     if (!id) return;
-    navigate(`/update-product/${id}`);
+    navigate(`/admin/update-product/${id}`);
   };
 
   return (
     <div className={styles.adminContainer}>
-      <div className={styles.sidebar}>
-        <div className={styles.sidebarLogo}>Pawfect Home</div>
-        <ul className={styles.sidebarMenu}>
-          <li className={`${styles.sidebarMenuItem} ${styles.active}`}><span>Pet Shop</span></li>
-          <li className={styles.sidebarMenuItem}><span>Dashboard</span></li>
-          <li className={styles.sidebarMenuItem}><span>Medical Reports</span></li>
-          <li className={styles.sidebarMenuItem}><span>User Management</span></li>
-          <li className={styles.sidebarMenuItem}><span>Orders</span></li>
-          <li className={styles.sidebarMenuItem}><span>Analytics</span></li>
-          <li className={styles.sidebarMenuItem}><span>Settings</span></li>
-        </ul>
-      </div>
-
       <div className={styles.mainContent}>
         <div className={styles.pageContent}>
           <div className={styles.container}>

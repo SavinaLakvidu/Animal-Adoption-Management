@@ -45,35 +45,6 @@ function User() {
 
   return (
     <div>
-      <div className={styles.sidebar}>
-        <div className={styles.sidebarLogo}>Pawfect Home</div>
-
-        <div className={styles.sidebarSection}>
-          <h3 className={styles.sidebarSectionTitle}>Products</h3>
-        </div>
-
-        <ul className={styles.sidebarMenu}>
-          <li className={styles.sidebarMenuItem}>
-            <Link to="/">
-              <i className="material-icons">home</i>
-              <span>Home</span>
-            </Link>
-          </li>
-          <li className={`${styles.sidebarMenuItem} ${styles.sidebarMenuItemActive}`}>
-            <Link to="/user">
-              <i className="material-icons">pets</i>
-              <span>Pet Shop</span>
-            </Link>
-          </li>
-          <li className={styles.sidebarMenuItem}>
-            <Link to="/medical-records">
-              <i className="material-icons">article</i>
-              <span>Medical Records</span>
-            </Link>
-          </li>
-        </ul>
-      </div>
-
       <div className={styles.mainContent}>
         <div className={styles.container}>
           <h2 className={styles.heading}>Pet Shop</h2>

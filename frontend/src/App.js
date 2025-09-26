@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar.js";
 import Home from "./pages/Home.js";
 import MedicalRecords from "./pages/MedicalRecords.js";
@@ -13,7 +13,9 @@ import AppointmentScheduling from './pages/AppointmentScheduling.js';
 import Register from "./pages/Register.js";
 import RescuedPet from "./pages/RescuedPet.js";
 import PetShop from "./pages/User.js";
-import User from "./pages/Login.js"
+import AdminDashboard from "./components/AdminDashboard.js";
+import UpdateProduct from './pages/UpdateProduct.js';
+import EditProduct from './pages/Admin.js';
 
 function App() {
   return (
@@ -29,15 +31,21 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/rescued-pet" element={<RescuedPet />} />
           <Route path="/products" element={<PetShop />} />
-          <Route path="/user" element={<User />} />
+          <Route path="/pet-adoption" element={<PetAdoption />} />
+
           <Route
-            path="/admin/pet-listing"
+            path="/admin/*"
             element={
-              <ProtectedRoute requiredRole="admin">
-                <PetListing />
+              <ProtectedRoute requiredRole="ADMIN">
+                <AdminDashboard />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route path="edit-product" element={<EditProduct />} />
+            <Route path="update-product/:id" element={<UpdateProduct />} />
+          </Route>
+
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <Footer />
       </Router>

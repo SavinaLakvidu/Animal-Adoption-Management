@@ -82,7 +82,7 @@ function Home() {
           <Carousel.Caption>
             <h1>Pet Shop</h1>
             <p>Find quality food, toys, and accessories for your pets.</p>
-            <Link to="/petshop">
+            <Link to="/products">
               <Button variant="danger" size="lg">Shop Now</Button>
             </Link>
           </Carousel.Caption>
@@ -98,7 +98,7 @@ function Home() {
           <Carousel.Caption>
             <h1>Rescued Pets</h1>
             <p>Meet our rescued pets and give them a loving home.</p>
-            <Link to="/rescued-pets">
+            <Link to="/rescued-pet">
               <Button variant="danger" size="lg">View Rescued Pets</Button>
             </Link>
           </Carousel.Caption>

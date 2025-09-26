@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaHome, FaUserPlus, FaDonate, FaHandsHelping, FaPaw, FaUserCircle } from "react-icons/fa";
+import { FaHome, FaUserPlus, FaBookMedical, FaHandsHelping, FaPaw, FaUserCircle, FaHandHoldingMedical, FaShoppingCart } from "react-icons/fa";
 import styles from "./Navbar.module.css";
 import { useAuth } from "../context/AuthContext";
 
@@ -25,18 +25,22 @@ function NavigationBar() {
     <Navbar expand="lg" variant="dark" className={`${styles.customNavbar} py-3`} sticky="top">
       <Container fluid>
         <Navbar.Brand as={Link} to="/" className={`d-flex align-items-center me-5 ${styles.brand}`}>
-          <FaHome className="me-2" />
+          <FaHome className={styles.brandIcon} />
           <span className={styles.brandText}>Pawfect Home</span>
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className={`ms-auto align-items-center ${styles.navContainer}`}>
-            <Nav.Link as={Link} to="/products" className={`mx-3 ${styles.navItem}`}>Pet Shop</Nav.Link>
-            <Nav.Link as={Link} to="/rescued-pet" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
-              <FaPaw className="me-1" /> Rescued Pets
+            <Nav.Link as={Link} to="/products" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+              <FaShoppingCart classname="me-1"/> Pet Shop
             </Nav.Link>
-            <Nav.Link as={Link} to="/pet-profiles" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+            {!isAdmin && (
+            <Nav.Link as={Link} to="/rescued-pet" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+              <FaHandHoldingMedical className="me-1" /> Rescued Diaries
+            </Nav.Link>
+            )}
+            <Nav.Link as={Link} to="/pet-adoption" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
               <FaPaw className="me-1" /> All Pets
             </Nav.Link>
 
@@ -44,13 +48,9 @@ function NavigationBar() {
               <Nav.Link as={Link} to="/admin" className={`mx-3 ${styles.navItem}`}>Dashboard</Nav.Link>
             )}
 
-            <Nav.Link as={Link} to="/donations" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
-              <FaDonate className="me-1" /> Donate
+            <Nav.Link as={Link} to="/medical-records" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+              <FaBookMedical className="me-1" /> Medical Records
             </Nav.Link>
-            <Nav.Link as={Link} to="/volunteering" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
-              <FaHandsHelping className="me-1" /> Volunteer
-            </Nav.Link>
-
             {!isLoggedIn && !isRegisterPage && (
               <Nav.Link as={Link} to="/register" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
                 <FaUserPlus className="me-1" /> Register
@@ -58,7 +58,9 @@ function NavigationBar() {
             )}
 
             {!isLoggedIn && !isLoginPage && (
-              <Nav.Link as={Link} to="/login" className={`mx-3 ${styles.navItem}`}>Login</Nav.Link>
+              <Nav.Link as={Link} to="/login" className={`mx-3 mx-3 d-flex align-items-center ${styles.navItem}`}>
+                <FaUserCircle className="me-1" />Login
+              </Nav.Link>
             )}
 
             {isLoggedIn && (

@@ -5,6 +5,7 @@ import styles from "./MedicalRecords.module.css";
 import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { useAuth } from "../context/AuthContext";
 
 Modal.setAppElement("#root");
 
@@ -21,6 +22,9 @@ function MedicalRecords() {
     age: "",
     petId: ""
   });
+
+  const { user } = useAuth();
+  const isAdmin = user?.role === "ADMIN";
 
   useEffect(() => {
     API.get("/medical-records")
@@ -124,13 +128,17 @@ function MedicalRecords() {
       <h1>Medical Records</h1>
 
       <div className={styles.topBar}>
-        <button className={styles.btn} onClick={() => setIsModalOpen(true)}>
-          Create New
-        </button>
-        <Link className={styles.btn} to="/appointment">Appointment Scheduling</Link>
-        <button className={styles.btn} onClick={downloadReport}>
-          Download Report
-        </button>
+        {isAdmin && (
+          <>
+            <button className={styles.btn} onClick={() => setIsModalOpen(true)}>
+              Create New
+            </button>
+            <Link className={styles.btn} to="/appointment">Appointment Scheduling</Link>
+            <button className={styles.btn} onClick={downloadReport}>
+              Download Report
+            </button>
+          </>
+        )}    
       </div>
 
       <input
@@ -149,7 +157,7 @@ function MedicalRecords() {
             <th>Vaccination</th>
             <th>Age</th>
             <th>Pet ID</th>
-            <th>Actions</th>
+            {isAdmin && <th>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -161,25 +169,27 @@ function MedicalRecords() {
                 <td>{r.vaccination}</td>
                 <td>{r.age}</td>
                 <td>{r.petId}</td>
-                <td>
-                  <button
-                    className={`${styles.btn} ${styles.btnEdit}`}
-                    onClick={() => openEditModal(r)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className={`${styles.btn} ${styles.btnDanger}`}
-                    onClick={() => deleteRecord(r.mid)}
-                  >
-                    Delete
-                  </button>
+                {isAdmin && (
+                  <td>
+                    <button
+                      className={`${styles.btn} ${styles.btnEdit}`}
+                      onClick={() => openEditModal(r)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className={`${styles.btn} ${styles.btnDanger}`}
+                      onClick={() => deleteRecord(r.mid)}
+                    >
+                      Delete
+                    </button>
                 </td>
+                )}
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6" className={styles.noRecords}>
+              <td colSpan={isAdmin ? "6" : "5"} className={styles.noRecords}>
                 No records found
               </td>
             </tr>

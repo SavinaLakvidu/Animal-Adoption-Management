@@ -1,5 +1,5 @@
-/* UpdateProduct.css */
-.update-product-container {
+/* UpdateProduct.module.css */
+.updateProductContainer {
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -9,7 +9,7 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.form-container {
+.formContainer {
   width: 100%;
   max-width: 700px;
   background-color: white;
@@ -27,28 +27,28 @@
   border-bottom: 2px solid #e9ecef;
 }
 
-.form-section {
+.formSection {
   padding: 20px;
   border: 1px solid #e9ecef;
   border-radius: 5px;
   background-color: #f8f9fa;
 }
 
-.form-section h3 {
+.formSection h3 {
   margin-top: 0;
   color: #8c1e2f;
   border-bottom: 1px solid #dee2e6;
   padding-bottom: 10px;
 }
 
-.form-row {
+.formRow {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   margin-bottom: 15px;
 }
 
-.form-group {
+.formGroup {
   flex: 1;
   min-width: 250px;
   display: flex;
@@ -56,33 +56,34 @@
   margin-bottom: 15px;
 }
 
-.form-group label {
+.formGroup label {
   font-weight: bold;
   margin-bottom: 5px;
   color: #495057;
 }
 
-.form-group input, 
-.form-group textarea {
+.formGroup input,
+.formGroup textarea {
   padding: 10px;
   border: 1px solid #ced4da;
   border-radius: 4px;
   font-size: 16px;
 }
 
-.form-group textarea {
+.formGroup textarea {
   min-height: 100px;
   resize: vertical;
 }
 
-.button-group {
+.buttonGroup {
   display: flex;
   gap: 15px;
   margin-top: 20px;
   justify-content: flex-end;
 }
 
-.update-product-btn, .cancel-btn {
+.updateProductBtn,
+.cancelBtn {
   border: none;
   padding: 12px 25px;
   border-radius: 5px;
@@ -92,27 +93,27 @@
   transition: background-color 0.3s;
 }
 
-.update-product-btn {
+.updateProductBtn {
   background-color: #8c1e2f;
   color: white;
 }
 
-.update-product-btn:hover {
+.updateProductBtn:hover {
   background-color: #6a1622;
 }
 
-.cancel-btn {
+.cancelBtn {
   background-color: #6c757d;
   color: white;
 }
 
-.cancel-btn:hover {
+.cancelBtn:hover {
   background-color: #5a6268;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .form-row {
+  .formRow {
     flex-direction: column;
     gap: 0;
   }
