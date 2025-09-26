@@ -1,53 +1,22 @@
-
 import Appointment from "../model/Appointment.js";
 
-export const createAppointmentService = async (appointmentData) => {
-  try {
-    const appointment = new Appointment(appointmentData);
-    await appointment.save();
-    return appointment;
-  } catch (error) {
-    throw new Error("Error creating appointment: " + error.message);
-  }
+export const createAppointment = async (data) => {
+  const appointment = new Appointment(data);
+  return await appointment.save();
 };
 
-export const getAllAppointmentsService = async () => {
-  try {
-    const appointments = await Appointment.find();
-    return appointments;
-  } catch (error) {
-    throw new Error("Error fetching appointments: " + error.message);
-  }
+export const getAppointments = async () => {
+  return await Appointment.find().populate("vetId");
 };
 
-export const getAppointmentByIdService = async (appointmentId) => {
-  try {
-    const appointment = await Appointment.findOne({ appointmentId });
-    return appointment;
-  } catch (error) {
-    throw new Error("Error fetching appointment: " + error.message);
-  }
+export const getAppointmentById = async (id) => {
+  return await Appointment.findById(id).populate("vetId");
 };
 
-export const updateAppointmentService = async (id, updateData) => {
-  try {
-    const appointment = await Appointment.findOneAndUpdate(
-      { appointmentId: id },
-      updateData,
-      { new: true }
-    );
-
-    return appointment;
-  } catch (error) {
-    throw new Error("Error updating appointment: " + error.message);
-  }
+export const updateAppointment = async (id, updates) => {
+  return await Appointment.findByIdAndUpdate(id, updates, { new: true });
 };
 
-export const deleteAppointmentService = async (appointmentId) => {
-  try {
-    const deletedAppointment = await Appointment.findOneAndDelete({ appointmentId });
-    return deletedAppointment;
-  } catch (error) {
-    throw new Error("Error deleting appointment: " + error.message);
-  }
+export const deleteAppointment = async (id) => {
+  return await Appointment.findByIdAndDelete(id);
 };

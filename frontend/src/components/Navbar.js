@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaHome, FaUserPlus, FaBookMedical, FaHandsHelping, FaPaw, FaUserCircle, FaHandHoldingMedical, FaShoppingCart } from "react-icons/fa";
+import { FaHome, FaUserPlus, FaBookMedical,FaPaw, FaUserCircle, FaHandHoldingMedical, FaShoppingCart } from "react-icons/fa";
 import styles from "./Navbar.module.css";
 import { useAuth } from "../context/AuthContext";
 

@@ -26,6 +26,27 @@ export const getAllVetsController = async (req, res) => {
   }
 };
 
+export const getVetsAvailability = async (req, res) => {
+  const { date } = req.query;
+  if (!date) return res.status(400).json({ message: "Date is required" });
+
+  try {
+    const vets = await Vet.find();
+    const availability = vets.map(vet => {
+      const dayAvailability = vet.availability.find(a => a.date.toISOString().split('T')[0] === date);
+      return {
+        vetId: vet.vetId,
+        name: vet.name,
+        slots: dayAvailability ? dayAvailability.slots : []
+      };
+    });
+    res.json(availability);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 export const getVetByIdController = async (req, res) => {
   try {
     const { vetId } = req.params;

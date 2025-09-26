@@ -31,16 +31,24 @@ export const AuthProvider = ({ children }) => {
   }, [user, token]);
 
   const register = async (name, email, password) => {
-    const res = await API.post("/user/register", { name, email, password });
-    const data = res.data;
+    try {
+      const res = await API.post("/user/register", { name, email, password });
+      const data = res.data;
 
-    setUser(data.user);
-    setToken(data.accessToken);
+      setUser(data.user);
+      setToken(data.token);
 
-    localStorage.setItem("user", JSON.stringify(data.user));
-    localStorage.setItem("token", data.accessToken);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
 
-  return data;
+      return data;
+    } catch (err) {
+      if (err.response && err.response.data.message) {
+        throw new Error(err.response.data.message);
+      } else {
+        throw new Error("Registration failed. Please try again.");
+      }
+    }
   };
 
   const login = async (email, password) => {

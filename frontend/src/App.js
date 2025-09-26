@@ -9,7 +9,7 @@ import PetListing from "./pages/Admin/PetListing.js";
 import { AuthProvider, useAuth } from "./context/AuthContext.js";
 import Footer from "./components/Footer.js";
 import ProtectedRoute from "./components/ProtectedRoute.js";
-import AppointmentScheduling from './pages/AppointmentScheduling.js';
+import AppointmentBooking from './pages/AppointmentBooking.js';
 import Register from "./pages/Register.js";
 import RescuedPet from "./pages/RescuedPet.js";
 import PetShop from "./pages/User.js";
@@ -24,7 +24,7 @@ function App() {
         <NavbarWithAuth />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/appointment" element={<AppointmentScheduling />} />
+          <Route path="/appointment" element={<AppointmentBooking />} />
           <Route path="/medical-records" element={<MedicalRecords />} />
           <Route path="/pet-profiles" element={<PetListing />} />
           <Route path="/login" element={<Login />} />
