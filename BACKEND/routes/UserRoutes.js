@@ -10,7 +10,7 @@ import {
   verifyForgotPasswordOtpController, // include if you use it in routes
 } from '../controller/UserController.js';
 
-import auth from '../middleware/auth.js';   // authentication middleware
+import { authenticate as auth } from '../middleware/authMiddleware.js'; // updated auth middleware
 import upload from '../middleware/upload.js'; // multer middleware for file uploads
 
 const userRouter = express.Router();

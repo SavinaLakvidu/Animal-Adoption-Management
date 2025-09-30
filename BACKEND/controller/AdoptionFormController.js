@@ -1,6 +1,6 @@
 import {
   createAdoptionFormService,
-  getAllAdoptionFormsService,
+  getAdoptionFormsService,
   getAdoptionFormByIdService,
   updateAdoptionFormService,
   deleteAdoptionFormService,
@@ -9,7 +9,7 @@ import {
 // Create a new adoption form
 export const createAdoptionFormController = async (req, res) => {
   try {
-    const formData = req.body;
+    const formData = { ...req.body, userId: req.user.id }; // attach authenticated user's ID
 
     // Basic validation
     const { adopterName, adopterEmail, adopterPhone, adopterAddress, reasonForAdoption, petId } = formData;
@@ -25,16 +25,18 @@ export const createAdoptionFormController = async (req, res) => {
   }
 };
 
+
 // Get all adoption forms
-export const getAllAdoptionFormsController = async (req, res) => {
+export const getAdoptionFormsController = async (req, res) => {
   try {
-    const forms = await getAllAdoptionFormsService();
+    const forms = await getAdoptionFormsService(req.user);
     res.status(200).json(forms);
   } catch (error) {
     console.error("Error fetching adoption forms:", error);
     res.status(500).json({ message: error.message });
   }
 };
+
 
 // Get adoption form by ID
 export const getAdoptionFormByIdController = async (req, res) => {

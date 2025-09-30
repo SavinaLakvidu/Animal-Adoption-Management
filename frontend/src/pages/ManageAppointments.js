@@ -165,18 +165,22 @@ function ManageAppointments() {
   const [editingAppt, setEditingAppt] = useState(null);
   const [vets, setVets] = useState([]);
 
-  const fetchAppointments = async () => {
-    try {
-      const res = await API.get("/appointment", { headers: { Authorization: `Bearer ${token}` } });
-      setAppointments(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
-    if (user?.role === "VET") fetchAppointments();
-  }, [user]);
+    const fetchAppointments = async () => {
+      try {
+        const res = await API.get("/appointment", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setAppointments(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (user?.role === "VET") {
+      fetchAppointments();
+    }
+  }, [user, token]);
 
   useEffect(() => {
     const fetchVets = async () => {

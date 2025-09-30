@@ -59,6 +59,19 @@ export const updatePetProfileController = async (req, res) => {
   }
 };
 
+// Update medical info for pet
+export const updateMedicalInfoController = async (req, res) => {
+  try {
+    const { medicalInfo } = req.body;
+    const updatedPet = await updatePetProfileService(req.params.id, { medicalInfo });
+    if (!updatedPet) return res.status(404).json({ message: "Pet not found" });
+    res.status(200).json({ message: "Medical info updated successfully", pet: updatedPet });
+  } catch (error) {
+    console.error("Error updating medical info:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Delete pet profile
 export const deletePetProfileController = async (req, res) => {
   try {

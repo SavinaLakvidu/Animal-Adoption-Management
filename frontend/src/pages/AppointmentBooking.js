@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styles from "./AppointmentBooking.module.css";
 import API from "../services/api";
 import { useAuth } from "../context/AuthContext.js";
@@ -27,8 +27,7 @@ function AppointmentPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Fetch user appointments
-  const fetchUserAppointments = async () => {
+  const fetchUserAppointments = useCallback(async () => {
     if (!user || !token) return;
     try {
       const res = await API.get("/appointment/user", {
@@ -38,11 +37,11 @@ function AppointmentPage() {
     } catch (err) {
       console.error("Error fetching user appointments:", err);
     }
-  };
+  }, [user, token]);
 
   useEffect(() => {
     fetchUserAppointments();
-  }, [user, token]);
+  }, [fetchUserAppointments]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

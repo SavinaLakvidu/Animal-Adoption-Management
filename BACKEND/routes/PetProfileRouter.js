@@ -5,8 +5,8 @@ import {
   getPetProfileByIdController,
   updatePetProfileController,
   deletePetProfileController,
+  updateMedicalInfoController,
 } from "../controller/PetProfileController.js";
-import { authenticate, authorizeRoles } from "../middleware/authMiddleware.js";
 
 const PetProfileRouter = express.Router();
 
@@ -15,6 +15,7 @@ PetProfileRouter.get("/", getAllPetProfilesController);      // Read all
 PetProfileRouter.get("/:id", getPetProfileByIdController);   // Read one   
 PetProfileRouter.put("/:id", updatePetProfileController);    // Update
 PetProfileRouter.delete("/:id", deletePetProfileController); // Delete
+PetProfileRouter.put("/:id/medical", updateMedicalInfoController);
 
 
 export default PetProfileRouter;

@@ -30,6 +30,28 @@ export const getAdoptionFormByIdService = async (id) => {
   }
 };
 
+// Get adoption forms for a specific user
+export const getAdoptionFormsService = async (user) => {
+  try {
+    if (!user) throw new Error("User not authenticated");
+
+    let query = {};
+    if (user.role !== "ADMIN") {
+      // Regular users see only their own forms
+      query.userId = user._id;
+    }
+
+    return await AdoptionForm.find(query)
+      .populate("petId")
+      .populate("reviewedBy", "name")
+      .sort({ createdAt: -1 })
+      .lean();
+  } catch (error) {
+    throw new Error("Error fetching adoption forms: " + error.message);
+  }
+};
+
+
 // Update adoption form
 export const updateAdoptionFormService = async (id, updateData) => {
   try {

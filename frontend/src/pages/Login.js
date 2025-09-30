@@ -1,7 +1,6 @@
 // src/pages/Login.js
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import styles from "./Login.module.css";
@@ -27,7 +26,7 @@ const handleSubmit = async (e) => {
     const role = (res.user?.role || "").toUpperCase();
     if (role === "VET") {
       navigate("/manage-appointments", { replace: true });
-    } else if (role == "ADMIN") {
+    } else if (role === "ADMIN") {
       navigate("/admin", { replace: true });
     } else {
       navigate("/", { replace: true });

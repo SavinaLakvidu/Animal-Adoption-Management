@@ -33,48 +33,45 @@ export const AuthProvider = ({ children }) => {
   const register = async (name, email, password) => {
     try {
       const res = await API.post("/user/register", { name, email, password });
-      const data = res.data;
+      const data = res.data.data || res.data;
 
       setUser(data.user);
-      setToken(data.token);
+      setToken(data.accessToken);
 
       localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.accessToken);
 
       return data;
     } catch (err) {
-      if (err.response && err.response.data.message) {
-        throw new Error(err.response.data.message);
-      } else {
-        throw new Error("Registration failed. Please try again.");
-      }
+      const msg = err.response?.data?.message || "Registration failed. Please try again.";
+      throw new Error(msg);
     }
   };
 
   const login = async (email, password) => {
-    const res = await API.post("/user/login", { email, password });
-    const body = res.data;
-    if (!body) throw new Error("No response body from login");
+    try {
+      const res = await API.post("/user/login", { email, password });
+      const payload = res.data?.data;
+      if (!payload) throw new Error("Login failed: no response data");
 
-    if (body.error) {
-      throw new Error(body.message || "Login failed");
+      const loggedUser = payload.user;
+      const accessToken = payload.accessToken;
+
+      if (!loggedUser || !accessToken) {
+        throw new Error("Login response missing user or token");
+      }
+
+      setUser(loggedUser);
+      setToken(accessToken);
+
+      localStorage.setItem("user", JSON.stringify(loggedUser));
+      localStorage.setItem("token", accessToken);
+
+      return { user: loggedUser, accessToken, refreshToken: payload.refreshToken };
+    } catch (err) {
+      const msg = err.response?.data?.message || err.message || "Login failed";
+      throw new Error(msg);
     }
-
-    const payload = body.data || {};
-    const loggedUser = payload.user || payload?.user || null;
-    const accessToken = payload.accessToken || payload.access_token || payload.token || null;
-
-    if (!loggedUser || !accessToken) {
-      console.error("Unexpected login response shape:", body);
-      throw new Error(body.message || "Login response missing user or token");
-    }
-
-    setUser(loggedUser);
-    setToken(accessToken);
-    localStorage.setItem("user", JSON.stringify(loggedUser));
-    localStorage.setItem("token", accessToken);
-
-    return { user: loggedUser, accessToken, refreshToken: payload.refreshToken || payload.refresh_token };
   };
 
   const logout = () => {

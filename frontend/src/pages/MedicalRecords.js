@@ -145,6 +145,7 @@ export default function MedicalRecords() {
   const downloadPDF = (record) => {
     const doc = new jsPDF();
     doc.text("Medical Record", 14, 20);
+    console.log("autoTable method:", typeof doc.autoTable);
 
     const rows = [
       ["Medical Record ID", record.mid],
@@ -160,7 +161,6 @@ export default function MedicalRecords() {
       ["Vaccination Status", record.vaccinationStatus],
       ["Vital Signs", record.vitalSigns],
       ["Diagnosis", record.diagnosis],
-      ["Follow-up Date", record.followUpDate?.substring(0, 10)],
       ["Fit for Adoption", record.fitForAdoption?.status ? "Yes" : "No"],
       ["Adoption Notes", record.fitForAdoption?.notes || ""],
     ];

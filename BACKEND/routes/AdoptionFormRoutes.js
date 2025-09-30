@@ -1,7 +1,7 @@
 import express from "express";
 import {
   createAdoptionFormController,
-  getAllAdoptionFormsController,
+  getAdoptionFormsController,
   getAdoptionFormByIdController,
   updateAdoptionFormController,
   deleteAdoptionFormController,
@@ -14,7 +14,7 @@ const router = express.Router();
 router.post("/", authenticate, createAdoptionFormController);
 
 // Get all adoption forms (admin only)
-router.get("/", authenticate, authorizeRoles("admin"), getAllAdoptionFormsController);
+router.get("/", authenticate, getAdoptionFormsController);
 
 // Get adoption form by ID (admin or adopter only)
 router.get("/:id", authenticate, getAdoptionFormByIdController);

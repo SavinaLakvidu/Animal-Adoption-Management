@@ -18,6 +18,8 @@ import UpdateProduct from './pages/UpdateProduct.js';
 import EditProduct from './pages/Admin.js';
 import ManageAppointments from "./pages/ManageAppointments";
 import MedicalRecordDetail from "./pages/MedicalRecordDetail.js";
+import Donations from "./pages/Donations.js";
+import Volunteers from "./pages/Volunteers.js";
 
 function App() {
   return (
@@ -27,12 +29,13 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/appointment" element={<AppointmentBooking />} />
-          <Route path="/pet-profiles" element={<PetListing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/rescued-pet" element={<RescuedPet />} />
           <Route path="/products" element={<PetShop />} />
           <Route path="/pet-adoption" element={<PetAdoption />} />
+          <Route path="/donations" element={<Donations />} />
+          <Route path="/volunteers" element={<Volunteers />} />
 
           <Route
             path="/admin/*"
@@ -45,6 +48,15 @@ function App() {
             <Route path="edit-product" element={<EditProduct />} />
             <Route path="update-product/:id" element={<UpdateProduct />} />
           </Route>
+
+          <Route
+            path="/pet-profiles"
+            element={
+            <ProtectedRoute requiredRole="ADMIN">
+              <PetListing />
+            </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/manage-appointments"
