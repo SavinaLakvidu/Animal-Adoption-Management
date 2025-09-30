@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 import generatedAccessToken from "../util/generatedAccessToken.js";
 import generatedRefreshToken from "../util/generatedRefreshToken.js";
 import generatedOtp from "../util/generatedOtp.js";
-import sendEmail from "../config/sendEmail.js";
 import verifyEmailTemplate from "../util/verifyEmailTemplate.js";
 import uploadImageCloudinary from "../util/uploadImageCloudinary.js";
 
@@ -33,14 +32,6 @@ export const registerUserService = async ({ name, email, password, role }) => {
   });
 
   const savedUser = await newUser.save();
-
-  // Send verification email
-  const verifyEmailUrl = `${process.env.FRONTEND_URL}/verify-email?code=${savedUser._id}`;
-  await sendEmail({
-    sendTo: savedUser.email,
-    subject: "Welcome to Pawfect Home site",
-    html: verifyEmailTemplate({ name, url: verifyEmailUrl }),
-  });
 
   return savedUser;
 };

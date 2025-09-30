@@ -1,18 +1,31 @@
 import express from "express";
 import {
-  createMedicalRecordController,
-  getAllMedicalRecordsController,
-  getMedicalRecordByIdController,
-  updateMedicalRecordController,
-  deleteMedicalRecordController
+  createMedicalRecord,
+  getAllMedicalRecords,
+  getMedicalRecordByMid,
+  getMedicalRecordsByAnimalId,
+  updateMedicalRecord,
+  deleteMedicalRecord,
 } from "../controller/MedicalRecordController.js";
 
-const medicalRecordRouter = express.Router();
+const router = express.Router();
 
-medicalRecordRouter.post("/", createMedicalRecordController);       // Create
-medicalRecordRouter.get("/", getAllMedicalRecordsController);       // Get all
-medicalRecordRouter.get("/:mid", getMedicalRecordByIdController);   // Get by MID
-medicalRecordRouter.put("/:mid", updateMedicalRecordController);    // Update
-medicalRecordRouter.delete("/:mid", deleteMedicalRecordController); // Delete by MID
+// Create
+router.post("/", createMedicalRecord);
 
-export default medicalRecordRouter;
+// Get all
+router.get("/", getAllMedicalRecords);
+
+// Get by mid
+router.get("/:mid", getMedicalRecordByMid);
+
+// Get by animalId
+router.get("/animal/:animalId", getMedicalRecordsByAnimalId);
+
+// Update
+router.put("/:mid", updateMedicalRecord);
+
+// Delete
+router.delete("/:mid", deleteMedicalRecord);
+
+export default router;

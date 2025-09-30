@@ -1,13 +1,14 @@
-// routes/appointmentRoutes.js
 import express from "express";
-import * as appointmentController from "../controller/AppointmentController.js";
+import { createAppointmentController, getAppointments, getAppointmentById, updateAppointment, deleteAppointment, getAppointmentsByUser } from "../controller/AppointmentController.js";
+import {authenticate} from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", appointmentController.createAppointment);
-router.get("/", appointmentController.getAppointments);
-router.get("/:id", appointmentController.getAppointmentById);
-router.put("/:id", appointmentController.updateAppointment);
-router.delete("/:id", appointmentController.deleteAppointment);
+router.post("/", authenticate, createAppointmentController);
+router.get("/", getAppointments);
+router.get("/user", authenticate, getAppointmentsByUser);
+router.get("/:id", getAppointmentById);
+router.put("/:id", updateAppointment);
+router.delete("/:id", deleteAppointment);
 
 export default router;

@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       default: "USER",
-      enum: ["USER", "STAFF", "ADMIN"],
+      enum: ["USER", "VET", "ADMIN"],
     },
     verify_email: {
       type: Boolean,

@@ -1,0 +1,163 @@
+.container {
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  background: #f9fafc;
+  border-radius: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.row .section:first-child {
+  flex: 3.71;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.row .section:last-child {
+  flex: 1.3;
+}
+
+.tableWrapper {
+  max-height: 550px;
+  overflow-y: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 0.8rem;
+  text-align: center;
+}
+
+.table th {
+  background: rgba(114, 47, 55, 0.95);
+  color: white;
+}
+
+
+.editBtn {
+  background: rgba(114, 47, 55, 0.95);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+.deleteBtn {
+  background: rgba(114, 47, 55, 0.95);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.form label {
+  width: 100%;
+  font-weight: bold;
+}
+
+.form input,
+.form select {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.saveBtn {
+  background: rgba(114, 47, 55, 0.95);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.cancelBtn {
+  background: rgba(114, 47, 55, 0.95);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 600px;
+  max-width: 90%;
+  max-height: 80%;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.modalForm label {
+  font-weight: bold;
+}
+
+.modalForm input,
+.modalForm select,
+.modalForm textarea {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.modalButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+

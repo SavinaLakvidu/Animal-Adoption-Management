@@ -17,25 +17,36 @@ const Login = () => {
     setData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // login returns { user, accessToken, refreshToken }
-      const res = await login(data.email, data.password);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await login(data.email, data.password);
 
-      toast.success("Login successful!");
+    alert("Login successful!");
 
-      const role = (res.user?.role || "").toUpperCase();
-      if (role === "ADMIN") {
-        navigate("/admin", { replace: true });
-      } else {
-        navigate("/", { replace: true });
-      }
-    } catch (error) {
-      console.error("Login failed:", error);
-      toast.error(error.response?.data?.message || error.message || "Login failed");
+    const role = (res.user?.role || "").toUpperCase();
+    if (role === "VET") {
+      navigate("/manage-appointments", { replace: true });
+    } else if (role == "ADMIN") {
+      navigate("/admin", { replace: true });
+    } else {
+      navigate("/", { replace: true });
     }
-  };
+  } catch (error) {
+    console.error("Login failed:", error);
+
+    let msg = "Login failed. Please try again.";
+    if (error.response) {
+      const status = error.response.status;
+      const serverMessage = error.response.data?.message;
+
+      if (status === 400 || status === 401) {
+        msg = serverMessage || "Invalid credentials. Please check email and password.";
+      }
+    }
+    alert(msg);
+  }
+};
 
   return (
     <div className={styles.loginContainer}>

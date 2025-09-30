@@ -1,26 +1,24 @@
-// controller/VetController.js
 import {
   createVetService,
   getAllVetsService,
   getVetByIdService,
   deleteVetByVetIdService,
-  deleteVetByMongoIdService
+  deleteVetByMongoIdService,
+  getVetsAvailabilityService,
+  updateVetAvailabilityService
 } from "../service/VetService.js";
 
 export const createVetController = async (req, res) => {
   try {
-    const { vetId, name, address, contactNo, dateOfBirth, email, password } = req.body;
-    const newVet = await createVetService({ vetId, name, address, contactNo, dateOfBirth, email, password });
-    res.status(201).json({ message: "Vet created successfully", vet: newVet });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+    const data = req.body;
+    const newVets = await createVetService(data);
 
-export const getAllVetsController = async (req, res) => {
-  try {
-    const vets = await getAllVetsService();
-    res.json(vets);
+    res.status(201).json({
+      message: Array.isArray(data)
+        ? "Vets created successfully"
+        : "Vet created successfully",
+      vets: newVets,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -31,19 +29,20 @@ export const getVetsAvailability = async (req, res) => {
   if (!date) return res.status(400).json({ message: "Date is required" });
 
   try {
-    const vets = await Vet.find();
-    const availability = vets.map(vet => {
-      const dayAvailability = vet.availability.find(a => a.date.toISOString().split('T')[0] === date);
-      return {
-        vetId: vet.vetId,
-        name: vet.name,
-        slots: dayAvailability ? dayAvailability.slots : []
-      };
-    });
+    const availability = await getVetsAvailabilityService(date);
     res.json(availability);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error fetching availability:", err);
+    res.status(500).json({ message: err.message || "Server error" });
+  }
+};
+
+export const getAllVetsController = async (req, res) => {
+  try {
+    const vets = await getAllVetsService();
+    res.json(vets);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -59,6 +58,23 @@ export const getVetByIdController = async (req, res) => {
     res.status(200).json(vet);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateAvailability = async (req, res) => {
+  try {
+    const { vetId, date, time, isAvailable } = req.body;
+
+    if (!vetId || !date || !time || typeof isAvailable === "undefined") {
+      return res.status(400).json({ error: "vetId, date, time, and isAvailable are required" });
+    }
+
+    const updatedVet = await updateVetAvailabilityService({ vetId, date, time, isAvailable });
+
+    return res.status(200).json(updatedVet);
+  } catch (err) {
+    console.error("Error updating vet availability:", err);
+    return res.status(500).json({ error: err.message });
   }
 };
 

@@ -16,6 +16,8 @@ import PetShop from "./pages/User.js";
 import AdminDashboard from "./components/AdminDashboard.js";
 import UpdateProduct from './pages/UpdateProduct.js';
 import EditProduct from './pages/Admin.js';
+import ManageAppointments from "./pages/ManageAppointments";
+import MedicalRecordDetail from "./pages/MedicalRecordDetail.js";
 
 function App() {
   return (
@@ -25,7 +27,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/appointment" element={<AppointmentBooking />} />
-          <Route path="/medical-records" element={<MedicalRecords />} />
           <Route path="/pet-profiles" element={<PetListing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -44,6 +45,35 @@ function App() {
             <Route path="edit-product" element={<EditProduct />} />
             <Route path="update-product/:id" element={<UpdateProduct />} />
           </Route>
+
+          <Route
+            path="/manage-appointments"
+            element={
+            <ProtectedRoute requiredRole="VET">
+              <ManageAppointments />
+            </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/medical-records"
+            element={
+            <ProtectedRoute requiredRole="VET">
+              <MedicalRecords />
+            </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/medical-records/:mid"
+            element={
+            <ProtectedRoute requiredRole="VET">
+              <MedicalRecordDetail />
+            </ProtectedRoute>
+            }
+          />
+
+          <Route path="/" element={<h1>Home Page</h1>} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

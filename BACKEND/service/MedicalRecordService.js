@@ -1,55 +1,37 @@
 import MedicalRecord from "../model/MedicalRecord.js";
 
-export const createMedicalRecordService = async (recordData) => {
-  try {
-    const record = new MedicalRecord(recordData);
-    await record.save();
-    return record;
-  } catch (error) {
-    throw new Error("Error creating medical record: " + error.message);
-  }
+// Create
+export const createMedicalRecord = async (data) => {
+  const record = new MedicalRecord(data);
+  return await record.save();
 };
 
-export const getAllMedicalRecordsService = async () => {
-  try {
-    const records = await MedicalRecord.find().lean();
-
-    return records.map((r) => ({
-      ...r,
-      petIdValue: r.petId ? r.petId : "N/A"
-    }));
-  } catch (error) {
-    throw new Error("Error fetching medical records: " + error.message);
-  }
+// Get all
+export const getAllMedicalRecords = async () => {
+  return await MedicalRecord.find();
 };
 
-
-export const getMedicalRecordByIdService = async (mid) => {
-  try {
-    return await MedicalRecord.findOne({ mid });
-  } catch (error) {
-    throw new Error("Error fetching medical record: " + error.message);
-  }
+// Get by mid
+export const getMedicalRecordByMid = async (mid) => {
+  return await MedicalRecord.findOne({ mid });
 };
 
-export const updateMedicalRecordService = async (mid, updates) => {
-  try {
-    const updatedRecord = await MedicalRecord.findOneAndUpdate(
-      { mid },
-      updates,
-      { new: true }
-    ).lean();
-
-    return updatedRecord;
-  } catch (error) {
-    throw new Error("Error updating medical record: " + error.message);
-  }
+// Get by animalId
+export const getMedicalRecordsByAnimalId = async (animalId) => {
+  return await MedicalRecord.find({ animalId });
 };
 
-export const deleteMedicalRecordService = async (mid) => {
-  try {
-    return await MedicalRecord.findOneAndDelete({ mid });
-  } catch (error) {
-    throw new Error("Error deleting medical record: " + error.message);
-  }
+// Update
+export const updateMedicalRecord = async (mid, data) => {
+  return await MedicalRecord.findOneAndUpdate(
+    { mid },
+    { $set: data },
+    {new: true, runValidators: true,
+    }
+  );
+};
+
+// Delete
+export const deleteMedicalRecord = async (mid) => {
+  return await MedicalRecord.findOneAndDelete({ mid });
 };

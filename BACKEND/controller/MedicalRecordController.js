@@ -1,78 +1,63 @@
-import {
-  createMedicalRecordService,
-  getAllMedicalRecordsService,
-  getMedicalRecordByIdService,
-  deleteMedicalRecordService,
-  updateMedicalRecordService
-} from "../service/MedicalRecordService.js";
+import * as medicalRecordService from "../service/MedicalRecordService.js";
 
-export const createMedicalRecordController = async (req, res) => {
+// Create
+export const createMedicalRecord = async (req, res) => {
   try {
-    const { mid, dueDate, vaccination, age, petId, vetId } = req.body;
-
-    const newRecord = await createMedicalRecordService({
-      mid,
-      dueDate,
-      vaccination,
-      age,
-      petId,
-      vetId,
-    });
-
-    res.status(201).json({
-      message: "Medical record created successfully",
-      record: newRecord,
-    });
+    const record = await medicalRecordService.createMedicalRecord(req.body);
+    res.status(201).json(record);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "Error creating medical record: " + error.message,
-    });
+    res.status(400).json({ message: error.message });
   }
 };
 
-export const getAllMedicalRecordsController = async (req, res) => {
+// Get all
+export const getAllMedicalRecords = async (req, res) => {
   try {
-    const records = await getAllMedicalRecordsService();
-    res.status(200).json(records);
+    const records = await medicalRecordService.getAllMedicalRecords();
+    res.json(records);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const getMedicalRecordByIdController = async (req, res) => {
+// Get by mid
+export const getMedicalRecordByMid = async (req, res) => {
   try {
-    const record = await getMedicalRecordByIdService(req.params.mid);
-    if (!record) {
-      return res.status(404).json({ message: "Medical record not found" });
-    }
-    res.status(200).json(record);
+    const record = await medicalRecordService.getMedicalRecordByMid(req.params.mid);
+    if (!record) return res.status(404).json({ message: "Medical record not found" });
+    res.json(record);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const updateMedicalRecordController = async (req, res) => {
+// Get by animalId
+export const getMedicalRecordsByAnimalId = async (req, res) => {
   try {
-    const { mid } = req.params;
-    const updates = req.body;
-    const updatedRecord = await updateMedicalRecordService(mid, updates);
-    if (!updatedRecord) {
-      return res.status(404).json({ message: "Medical record not found" });
-    }
-    res.status(200).json({ message: "Medical record updated", record: updatedRecord });
+    const records = await medicalRecordService.getMedicalRecordsByAnimalId(req.params.animalId);
+    res.json(records);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-export const deleteMedicalRecordController = async (req, res) => {
+// Update
+export const updateMedicalRecord = async (req, res) => {
   try {
-    const deletedRecord = await deleteMedicalRecordService(req.params.mid);
-    if (!deletedRecord) {
-      return res.status(404).json({ message: "Medical record not found" });
-    }
-    res.status(200).json({ message: "Medical record deleted successfully" });
+    const updated = await medicalRecordService.updateMedicalRecord(req.params.mid, req.body);
+    if (!updated) return res.status(404).json({ message: "Medical record not found" });
+    res.json(updated);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// Delete
+export const deleteMedicalRecord = async (req, res) => {
+  try {
+    const deleted = await medicalRecordService.deleteMedicalRecord(req.params.mid);
+    if (!deleted) return res.status(404).json({ message: "Medical record not found" });
+    res.json({ message: "Medical record deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -7,16 +7,14 @@ function ProtectedRoute({ children, requiredRole }) {
   const role = (user.role || "").toUpperCase();
 
   if (!token) {
-    // Not logged in
     return <Navigate to="/login" replace />;
   }
 
   if (requiredRole && role !== String(requiredRole).toUpperCase()) {
-    // Wrong role
     return <Navigate to="/" replace />;
   }
 
-  return children; // allowed
+  return children;
 }
 
 export default ProtectedRoute;

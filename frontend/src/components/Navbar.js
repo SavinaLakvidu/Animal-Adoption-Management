@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaHome, FaUserPlus, FaBookMedical,FaPaw, FaUserCircle, FaHandHoldingMedical, FaShoppingCart } from "react-icons/fa";
+import { FaHome, FaUserPlus, FaBookMedical,FaPaw, FaUserCircle, FaHandHoldingMedical, FaShoppingCart, FaCog } from "react-icons/fa";
 import styles from "./Navbar.module.css";
 import { useAuth } from "../context/AuthContext";
 
@@ -12,6 +12,7 @@ function NavigationBar() {
 
   const role = (user?.role || "").toUpperCase();
   const isAdmin = role === "ADMIN";
+  const isVet = role === "VET";
 
   const handleLogout = () => {
     logout();
@@ -33,7 +34,7 @@ function NavigationBar() {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className={`ms-auto align-items-center ${styles.navContainer}`}>
             <Nav.Link as={Link} to="/products" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
-              <FaShoppingCart classname="me-1"/> Pet Shop
+              <FaShoppingCart className="me-1"/> Pet Shop
             </Nav.Link>
             {!isAdmin && (
             <Nav.Link as={Link} to="/rescued-pet" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
@@ -45,11 +46,25 @@ function NavigationBar() {
             </Nav.Link>
 
             {isAdmin && (
-              <Nav.Link as={Link} to="/admin" className={`mx-3 ${styles.navItem}`}>Dashboard</Nav.Link>
+              <Nav.Link as={Link} to="/admin" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+              <FaCog className="me-1" /> Dashboard
+              </Nav.Link>
             )}
 
-            <Nav.Link as={Link} to="/medical-records" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
-              <FaBookMedical className="me-1" /> Medical Records
+            {isVet && (
+              <Nav.Link as={Link} to="/manage-appointments" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+              <FaCog className="me-1" />Manage Appointments
+              </Nav.Link>
+            )}
+
+            {isVet && (
+              <Nav.Link as={Link} to="/medical-records" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+              <FaBookMedical className="me-1" />Medical Records
+              </Nav.Link>
+            )}
+
+            <Nav.Link as={Link} to="/appointment" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
+              <FaBookMedical className="me-1" /> Book Appointment
             </Nav.Link>
             {!isLoggedIn && !isRegisterPage && (
               <Nav.Link as={Link} to="/register" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
