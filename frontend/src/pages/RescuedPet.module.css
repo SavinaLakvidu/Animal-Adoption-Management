@@ -2,22 +2,25 @@
 
 /* Container */
 .container {
-  width: 80%;
-  max-width: 1200px;
+  width: 95%;
+  max-width: 1400px;
   min-height: calc(100vh - 130px);
-  margin: 30px auto;
+  margin: 20px auto;
   padding: 30px;
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
 }
 
 .container h1 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
 }
 
 /* Top bar */
@@ -25,42 +28,63 @@
   display: flex;
   justify-content: flex-start;
   gap: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
 }
 
 /* Buttons */
 .btn {
-  background: #007bff;
+  background: rgba(114, 47, 55, 0.95);
   color: white;
-  padding: 11px 15px;
+  padding: 10px 16px;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
 }
 
 .btn:hover {
-  background: #0056b3;
-}
-
-.btnDanger {
-  background: red;
-  padding: 10px 10px;
-  color: white;
-}
-
-.btnDanger:hover {
-  background: darkred;
+  background:rgba(114, 47, 55, 0.95);
 }
 
 .btnEdit {
-  margin-right: 10px;
-  padding: 10px 10px;
+  background: #28a745;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 8px;
+  transition: background-color 0.2s;
+}
+
+.btnEdit:hover {
+  background: #218838;
+}
+
+.btnDanger {
+  background: #dc3545;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btnDanger:hover {
+  background: #c82333;
 }
 
 .btnRefresh {
   background: #6c757d;
-  padding: 11px 15px;
+  padding: 10px 16px;
   color: white;
 }
 
@@ -70,11 +94,69 @@
 
 .btnSuccess {
   background: #28a745;
-  padding: 10px 10px;
   color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  /* For Adopt and Mark Ready buttons */
+  margin-right: 5px;
 }
 
 .btnSuccess:hover {
+  background: #218838;
+}
+
+.btnSecondary {
+  background: #6c757d;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btnSecondary:hover {
+  background: #5a6268;
+}
+
+.btnWarning {
+  background: #ffc107;
+  color: #212529;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btnWarning:hover {
+  background: #e0a800;
+}
+
+.btnExport {
+  background: #28a745;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btnExport:hover {
   background: #218838;
 }
 
@@ -82,41 +164,77 @@
 .searchInput {
   display: block;
   width: 100%;
-  padding: 10px;
-  margin: 0 0 20px 0;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  padding: 12px 16px;
+  margin-bottom: 25px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
   box-sizing: border-box;
+  font-size: 14px;
+  background: #fff;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: rgba(114, 47, 55, 0.95);
+  box-shadow: 0 0 0 2px rgba(114, 47, 55, 0.95);
+}
+
+.searchInput::placeholder {
+  color: #6c757d;
 }
 
 /* Table */
 .recordsTable {
   width: 100%;
   border-collapse: collapse;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
 .recordsTable th,
 .recordsTable td {
-  border: 1px solid #ddd;
-  padding: 10px;
+  padding: 12px;
   text-align: center;
   vertical-align: middle;
   font-size: 14px;
+  border-bottom: 1px solid #dee2e6;
 }
 
 .recordsTable th {
-  background: #f4f4f4;
+  background: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+}
+
+.recordsTable tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.recordsTable tbody tr:hover {
+  background: #f8f9fa;
 }
 
 .recordsTable th:nth-child(3),
 .recordsTable td:nth-child(3) {
-  width: 25%; /* Description column wider */
   text-align: left;
 }
 
-.recordsTable th:nth-child(8),
-.recordsTable td:nth-child(8) {
-  width: 12%; /* Adoption Status column */
+.recordsTable th:last-child,
+.recordsTable td:last-child {
+  white-space: nowrap;
+}
+
+.noRecords {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+  font-size: 16px;
 }
 
 /* Modal overlay */
@@ -126,30 +244,36 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Modal window */
 .modalWindow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: #f2f2f2;
-  padding: 40px 30px;
-  width: 500px;
-  max-width: 90%;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background: white;
+  padding: 30px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   z-index: 2001;
+  position: relative;
 }
 
 .modalWindow h2 {
   margin-top: 0;
   margin-bottom: 25px;
   text-align: center;
-  font-family: Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 15px;
 }
 
 .modalWindow form {
@@ -162,42 +286,735 @@
 .modalWindow select,
 .modalWindow textarea {
   padding: 12px;
-  font-size: 15px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-family: Arial, sans-serif;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  transition: border-color 0.2s ease;
+  background: #fff;
+}
+
+.modalWindow input:focus,
+.modalWindow select:focus,
+.modalWindow textarea:focus {
+  outline: none;
+  border-color:rgba(114, 47, 55, 0.95);
+  box-shadow: 0 0 0 2px rgba(114, 47, 55, 0.95);
 }
 
 /* Textarea for description */
 .modalWindow textarea {
   resize: vertical;
-  min-height: 60px;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+/* Form enhancements */
+.formRow {
+  display: flex;
+  gap: 15px;
+}
+
+.formRow input,
+.formRow select {
+  flex: 1;
 }
 
 /* Modal buttons */
 .modalButtons {
   display: flex;
   justify-content: flex-end;
-  gap: 15px;
+  gap: 12px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+  border-top: 1px solid #dee2e6;
+  padding-top: 20px;
 }
 
 .modalButtons .btn {
-  padding: 12px 20px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 15px;
-}
-
-.modalButtons .btn:hover {
-  opacity: 0.9;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  min-width: 100px;
 }
 
 .modalButtons .btnDanger {
-  background-color: #ff4d4d;
+  background: #dc3545;
   color: white;
 }
 
 .modalButtons .btnDanger:hover {
-  background-color: #cc0000;
+  background: #c82333;
+}
+
+/* Pet details styles for view modal */
+.petDetailsSection {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border-left: 4px solid #007bff;
+}
+
+.petDetailsSection div {
+  margin-bottom: 8px;
+  color: #495057;
+}
+
+.petDetailsSection b {
+  color: #333;
+  font-weight: 600;
+}
+
+.imageContainer {
+  margin: 15px 0;
+}
+
+.imageContainer img {
+  max-width: 100%;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+}
+
+.medicalRecordsList {
+  margin-top: 15px;
+}
+
+.medicalRecordItem {
+  padding: 10px;
+  margin: 5px 0;
+  background: #e9ecef;
+  border-radius: 4px;
+  border-left: 3px solid #28a745;
+}
+
+.vaccinationItem {
+  padding: 10px;
+  margin: 5px 0;
+  background: #e9ecef;
+  border-radius: 4px;
+  border-left: 3px solid #17a2b8;
+}
+
+/* Rescued Animal Diaries Overview Styles (wine red theme) */
+.diariesOverview {
+  margin: 30px 0;
+  padding: 25px;
+  background: linear-gradient(135deg, #fff5f7 0%, #fde7ef 100%);
+  border-radius: 12px;
+  border: 1px solid #f5c1cf;
+  box-shadow: 0 2px 10px rgba(123, 30, 58, 0.08);
+}
+
+.diariesOverview h3 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #7b1e3a;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.diaryCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.diaryCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 15px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.diaryCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-color:rgba(114, 47, 55, 0.95);
+}
+
+.diaryCardActive {
+  background: linear-gradient(135deg,rgba(114, 47, 55, 0.95)0%, rgba(114, 47, 55, 0.95) 100%);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(114, 47, 55, 0.95);
+  border-color:rgba(114, 47, 55, 0.95);
+}
+
+.diaryCardActive .diaryLabel {
+  color: white;
+}
+
+.diaryCardActive .diaryCount {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.diaryCardActive:hover {
+  background: linear-gradient(135deg,rgba(114, 47, 55, 0.95) 0%,rgba(114, 47, 55, 0.95) 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(114, 47, 55, 0.95);
+}
+
+.diaryIcon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.diaryLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.diaryCount {
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Client Controls */
+.clientControls {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.clientControls .searchInput {
+  flex: 1;
+  min-width: 250px;
+  margin-bottom: 0;
+}
+
+.filterSelect {
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background: white;
+  color: #495057;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  min-width: 180px;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Admin Controls */
+.adminControls {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.adminControls .searchInput {
+  flex: 1;
+  min-width: 250px;
+  margin-bottom: 0;
+}
+
+/* Subtitle styling */
+.subtitle {
+  text-align: center;
+  color: #6c757d;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Current Filter Display */
+.currentFilter {
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+  border: 2px solid rgba(114, 47, 55, 0.95);
+  border-radius: 10px;
+  padding: 20px;
+  margin: 25px 0;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(114, 47, 55, 0.95);
+}
+
+.currentFilter h3 {
+  margin: 0 0 10px 0;
+  color: rgba(114, 47, 55, 0.95);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.currentFilter p {
+  margin: 0 0 15px 0;
+  color: #424242;
+  font-size: 1rem;
+}
+
+.clearFilterBtn {
+  background: #f44336;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.clearFilterBtn:hover {
+  background: #d32f2f;
+}
+
+/* Client View Styles */
+.subtitle {
+  text-align: center;
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.clientControls {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filterSelect {
+  padding: 12px 16px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  background: #fff;
+  min-width: 200px;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Pet Cards Grid */
+.petCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+  margin-bottom: 30px;
+}
+
+.petCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.petCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.petImageContainer {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.petImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.petCard:hover .petImage {
+  transform: scale(1.05);
+}
+
+.statusOverlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.statusBadge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.available {
+  background: #d4edda;
+  color: #155724;
+}
+
+.undertreatment {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.adopted {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.petCardContent {
+  padding: 20px;
+}
+
+.petName {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 15px 0;
+}
+
+.petDetails {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.petDetailItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detailLabel {
+  font-weight: 500;
+  color: #495057;
+  font-size: 14px;
+}
+
+.detailValue {
+  color: #333;
+  font-size: 14px;
+}
+
+.petDescription {
+  color: #6c757d;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.petMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e9ecef;
+}
+
+.rescueDate,
+.rescueLocation {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.cardActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.learnMoreBtn {
+  flex: 1;
+  padding: 10px 16px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.learnMoreBtn:hover {
+  background: #0056b3;
+}
+
+.adoptBtn {
+  flex: 1;
+  padding: 10px 16px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.adoptBtn:hover {
+  background: #218838;
+}
+
+.noPetsFound {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: #6c757d;
+}
+
+.noPetsFound h3 {
+  margin-bottom: 10px;
+  color: #495057;
+}
+
+/* Client Modal Styles */
+.clientModal {
+  background: white;
+  border-radius: 12px;
+  max-width: 700px;
+  width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: 0 auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.clientModalContent {
+  padding: 0;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.closeBtn:hover {
+  background: #f8f9fa;
+}
+
+.modalBody {
+  padding: 25px;
+}
+
+.modalPetImage {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 25px;
+}
+
+.petInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.infoSection h3 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 5px;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.infoGrid div {
+  padding: 8px 0;
+}
+
+.rescueStory p {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+.adoptionSection {
+  background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.adoptionSection h3 {
+  color: #28a745;
+  margin-bottom: 15px;
+}
+
+.contactBtn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 15px;
+}
+
+.contactBtn:hover {
+  background: #218838;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #6c757d;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    width: 98%;
+    padding: 20px 15px;
+    margin: 10px auto;
+  }
+
+  .container h1 {
+    font-size: 1.5rem;
+  }
+
+  .topBar {
+    justify-content: center;
+  }
+
+  .recordsTable {
+    font-size: 12px;
+  }
+
+  .recordsTable th,
+  .recordsTable td {
+    padding: 8px;
+  }
+
+  .modalWindow {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .modalButtons {
+    justify-content: center;
+  }
+
+  .formRow {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .petCardsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  
+  .clientControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filterSelect {
+    min-width: auto;
+  }
+  
+  .petDetails {
+    grid-template-columns: 1fr;
+  }
+  
+  .cardActions {
+    flex-direction: column;
+  }
+  
+  .clientModal {
+    width: 98%;
+    margin: 10px;
+  }
+  
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .recordsTable thead {
+    display: none;
+  }
+
+  .recordsTable tbody tr {
+    display: block;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    padding: 10px;
+  }
+
+  .recordsTable td {
+    display: block;
+    text-align: left;
+    border: none;
+    padding: 5px 0;
+  }
+
+  .recordsTable td:before {
+    content: attr(data-label) ": ";
+    font-weight: 600;
+    color: #495057;
+  }
 }

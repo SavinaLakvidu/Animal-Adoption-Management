@@ -4,10 +4,10 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import styles from "./Register.module.css";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
+import API from "../services/api";
 
 function Register() {
   const navigate = useNavigate();
-  const { register } = useAuth();
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -16,6 +16,11 @@ function Register() {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
+  const register = async (name, email, password) => {
+    const res = await API.post("/user/register", { name, email, password });
+    return res;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,12 +36,19 @@ function Register() {
     }
 
     try {
-      await register(data.name, data.email, data.password);
+      const res = await register(data.name, data.email, data.password);
+
       toast.success("Registration successful!");
-      navigate("/",{replace:true});
+      localStorage.setItem("token", res.data.token);
+      navigate("/login", { replace: true });
     } catch (err) {
       console.error(err);
-      toast.error(err.response?.data?.message || "Registration failed");
+      if (err.message === "User already exists" || 
+          err.response?.data?.message === "User already exists") {
+        alert("A user with this email already exists. Please log in.");
+      } else {
+        toast.error(err.response?.data?.message || "Registration failed");
+      }
     }
   };
 

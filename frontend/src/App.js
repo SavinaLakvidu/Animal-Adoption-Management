@@ -20,6 +20,7 @@ import ManageAppointments from "./pages/ManageAppointments";
 import MedicalRecordDetail from "./pages/MedicalRecordDetail.js";
 import Donations from "./pages/Donations.js";
 import Volunteers from "./pages/Volunteers.js";
+import Overview from './pages/Overview.js';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="/pet-adoption" element={<PetAdoption />} />
           <Route path="/donations" element={<Donations />} />
           <Route path="/volunteers" element={<Volunteers />} />
+          <Route path="/overview" element={<Overview/>} />
 
           <Route
             path="/admin/*"

@@ -1,7 +1,8 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import Modal from "react-modal";
+import styles from "./PetAdoption.module.css";
 
 Modal.setAppElement("#root");
 
@@ -15,6 +16,9 @@ function PetAdoption() {
   const [showMyForms, setShowMyForms] = useState(false);
   const [viewPetDetails, setViewPetDetails] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  // Filters for quick cards
+  const [filterSpecies, setFilterSpecies] = useState("All"); // 'All' | 'Dog' | 'Cat'
+  const [filterStatus, setFilterStatus] = useState("All"); // 'All' | 'Available' | 'Adopted'
 
   const [formData, setFormData] = useState({
     adopterName: "",
@@ -28,24 +32,23 @@ function PetAdoption() {
     experience: "",
   });
 
-  const fetchPets = useCallback(() => {
+  useEffect(() => {
+    fetchPets();
+    if (isLoggedIn) {
+      fetchMyForms();
+    }
+  }, [isLoggedIn]);
+
+  const fetchPets = () => {
     API.get("/pet-profiles", { params: { userRole: user?.role || "USER" } })
       .then((res) => setPets(Array.isArray(res.data) ? res.data : []))
       .catch((err) => console.error(err));
-  }, [user?.role]);
+  };
 
-  const fetchMyForms = useCallback(() => {
+  const fetchMyForms = () => {
     if (!isLoggedIn) return;
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("User not authenticated");
-      return;
-    }
-
-    API.get("/adoption-forms", {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    API.get("/adoption-forms")
       .then((res) => {
         console.log("Fetched adoption forms:", res.data);
         setMyForms(Array.isArray(res.data) ? res.data : []);
@@ -53,17 +56,11 @@ function PetAdoption() {
       .catch((err) => {
         console.error("Error fetching adoption forms:", err);
         if (err.response?.status !== 401) {
+          // Don't show error for 401 as it's handled by interceptor
           alert("Error fetching your adoption requests. Please try again.");
         }
       });
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    fetchPets();
-    if (isLoggedIn) {
-      fetchMyForms();
-    }
-  }, [isLoggedIn, fetchPets, fetchMyForms]);
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -103,13 +100,10 @@ function PetAdoption() {
     }
 
     try {
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("User not authenticated");
       const response = await API.post("/adoption-forms", {
         ...formData,
         petId: selectedPet._id,
-      },{ headers: {Authorization: `Bearer ${token}`,},
-    });
+      });
 
       console.log("Adoption form submitted successfully:", response.data);
       alert("Adoption request submitted successfully!");
@@ -162,7 +156,8 @@ function PetAdoption() {
     }
   };
 
-  const filteredPets = (pets || []).filter((pet) => {
+  // 1) Filter by search text only
+  const baseSearchPets = (pets || []).filter((pet) => {
     const q = (search ?? "").toString().toLowerCase();
     return (
       (pet?.petName ?? "").toString().toLowerCase().includes(q) ||
@@ -170,6 +165,31 @@ function PetAdoption() {
       (pet?.petSpecies ?? "").toString().toLowerCase().includes(q)
     );
   });
+
+  // 2) Apply quick filters (species/status) on top of search
+  const filteredPets = baseSearchPets.filter((pet) => {
+    const speciesOk = filterSpecies === "All" || pet?.petSpecies === filterSpecies;
+    const statusOk = filterStatus === "All" || pet?.petStatus === filterStatus;
+    return speciesOk && statusOk;
+  });
+
+  // Counts (computed from search results so numbers stay stable while toggling filters)
+  const dogCount = baseSearchPets.reduce(
+    (acc, p) => acc + (p?.petSpecies === "Dog" ? 1 : 0),
+    0
+  );
+  const catCount = baseSearchPets.reduce(
+    (acc, p) => acc + (p?.petSpecies === "Cat" ? 1 : 0),
+    0
+  );
+  const adoptedCount = baseSearchPets.reduce(
+    (acc, p) => acc + (p?.petStatus === "Adopted" ? 1 : 0),
+    0
+  );
+  const availableCount = baseSearchPets.reduce(
+    (acc, p) => acc + (p?.petStatus === "Available" ? 1 : 0),
+    0
+  );
 
   return (
     <div
@@ -189,7 +209,7 @@ function PetAdoption() {
             style={{
               padding: "10px 20px",
               marginRight: 10,
-              backgroundColor: "#007bff",
+              backgroundColor: "rgba(114, 47, 55, 0.95)",
               color: "white",
               border: "none",
               borderRadius: 5,
@@ -269,6 +289,79 @@ function PetAdoption() {
         </div>
       ) : (
         <div>
+          {/* Category counts summary styled similar to Rescued Diaries */}
+          <div className={styles.countsBar} aria-label="Pet category counts">
+            <div className={styles.countCards}>
+              {/* Dogs card */}
+              <div
+                className={`${styles.countCard} ${filterSpecies === 'Dog' ? styles.countCardActive : ''}`}
+                onClick={() => setFilterSpecies(filterSpecies === 'Dog' ? 'All' : 'Dog')}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setFilterSpecies(filterSpecies === 'Dog' ? 'All' : 'Dog');
+                  }
+                }}
+              >
+                <span className={styles.countIcon}>🐶</span>
+                <span className={styles.countLabel}>Dogs</span>
+                <span className={styles.countNumber}>{dogCount}</span>
+              </div>
+
+              {/* Cats card */}
+              <div
+                className={`${styles.countCard} ${filterSpecies === 'Cat' ? styles.countCardActive : ''}`}
+                onClick={() => setFilterSpecies(filterSpecies === 'Cat' ? 'All' : 'Cat')}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setFilterSpecies(filterSpecies === 'Cat' ? 'All' : 'Cat');
+                  }
+                }}
+              >
+                <span className={styles.countIcon}>🐱</span>
+                <span className={styles.countLabel}>Cats</span>
+                <span className={styles.countNumber}>{catCount}</span>
+              </div>
+
+              {/* Available status card */}
+              <div
+                className={`${styles.countCard} ${filterStatus === 'Available' ? styles.countCardActive : ''}`}
+                onClick={() => setFilterStatus(filterStatus === 'Available' ? 'All' : 'Available')}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setFilterStatus(filterStatus === 'Available' ? 'All' : 'Available');
+                  }
+                }}
+              >
+                <span className={styles.countIcon}>✅</span>
+                <span className={styles.countLabel}>Available</span>
+                <span className={styles.countNumber}>{availableCount}</span>
+              </div>
+
+              {/* Adopted status card */}
+              <div
+                className={`${styles.countCard} ${filterStatus === 'Adopted' ? styles.countCardActive : ''}`}
+                onClick={() => setFilterStatus(filterStatus === 'Adopted' ? 'All' : 'Adopted')}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setFilterStatus(filterStatus === 'Adopted' ? 'All' : 'Adopted');
+                  }
+                }}
+              >
+                <span className={styles.countIcon}>🏁</span>
+                <span className={styles.countLabel}>Adopted</span>
+                <span className={styles.countNumber}>{adoptedCount}</span>
+              </div>
+            </div>
+          </div>
+
           <input
             type="text"
             placeholder="Search by name, breed or species"
@@ -411,7 +504,7 @@ function PetAdoption() {
                         fontWeight: 500
                       }}
                     >
-                      View Full Details
+                      More Info
                     </button>
 
                     {pet.petStatus === "Available" && (
@@ -428,7 +521,7 @@ function PetAdoption() {
                           fontWeight: 600
                         }}
                       >
-                        🏠 Request Adoption
+                        🏠 Adopt Me
                       </button>
                     )}
                   </div>

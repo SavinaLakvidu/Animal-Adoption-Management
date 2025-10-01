@@ -1,0 +1,84 @@
+/* PetAdoption.module.css */
+
+/* Counts bar styled similar to Rescued Diaries overview (wine red theme) */
+.countsBar {
+  margin: 10px 0 16px;
+  padding: 18px;
+  background: linear-gradient(135deg, #fff5f7 0%, #fde7ef 100%);
+  border-radius: 12px;
+  border: 1px solid #f5c1cf;
+  box-shadow: 0 2px 10px rgba(123, 30, 58, 0.08);
+}
+
+.countCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+ .countCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+ .countCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  border-color: rgba(114, 47, 55, 0.95);
+}
+
+/* Active state similar to diaries */
+.countCardActive {
+  background: linear-gradient(135deg,rgba(114, 47, 55, 0.95) 0%, rgba(114, 47, 55, 0.95) 100%);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(114, 47, 55, 0.95);
+  border-color: rgba(114, 47, 55, 0.95);
+}
+
+.countCardActive .countLabel {
+  color: #ffffff;
+}
+
+.countCardActive .countNumber {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.countIcon {
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.countLabel {
+  font-weight: 600;
+  color: #495057;
+}
+
+.countNumber {
+  margin-left: auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  background: #fde7ef;
+  color: #7b1e3a;
+  border: 1px solid #f5c1cf;
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+  .countCards {
+    grid-template-columns: 1fr 1fr;
+  }
+}

@@ -9,15 +9,26 @@ import {
   verifyForgotPasswordOtpService,
 } from "../service/UserService.js";
 
+import jwt from "jsonwebtoken";
+
+
 export async function registerUserController(req, res) {
   try {
+    // Create the user
     const savedUser = await registerUserService(req.body);
 
-    const { accessToken } = await loginUserService({
-      email: req.body.email,
-      password: req.body.password,
-    });
+    // Generate JWT token
+    const accessToken = jwt.sign(
+      {
+        id: savedUser._id,
+        email: savedUser.email,
+        role: savedUser.role,
+      },
+      process.env.JWT_SECRET, // make sure you have this in your .env
+      { expiresIn: "1d" }    // token valid for 1 day
+    );
 
+    // Send back user info + token
     return res.status(201).json({
       message: "User registered successfully.",
       user: savedUser,
