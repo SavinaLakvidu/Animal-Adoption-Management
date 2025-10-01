@@ -24,7 +24,7 @@
 
 .registerBtn {
   padding: 10px 20px;
-  background-color: #28a745;
+  background-color: rgba(114, 47, 55, 0.95);
   color: white;
   border: none;
   border-radius: 4px;
@@ -34,7 +34,7 @@
 
 .editBtn {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: rgba(114, 47, 55, 0.95);
   color: white;
   border: none;
   border-radius: 4px;
@@ -44,7 +44,7 @@
 
 .refreshBtn {
   padding: 10px 20px;
-  background-color: #6c757d;
+  background-color: rgba(114, 47, 55, 0.95);
   color: white;
   border: none;
   border-radius: 4px;
@@ -52,9 +52,11 @@
   font-size: 14px;
 }
 
-.registerBtn:hover { background-color: #218838; }
-.editBtn:hover { background-color: #0056b3; }
-.refreshBtn:hover { background-color: #5a6268; }
+.editBtn:hover,
+.refreshBtn:hover,
+.registerBtn:hover {
+  background: #c9302c;
+}
 
 /* My Profile Section */
 .myProfileSection {

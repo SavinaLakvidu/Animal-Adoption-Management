@@ -5,8 +5,6 @@
 }
 
 .topBar {
-  display: flex;
-  justify-content: space-between;
   margin-bottom: 20px;
 }
 
@@ -17,16 +15,22 @@
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
+  margin-right: 10px;
 }
 
 .donateBtn {
-  background-color: #28a745;
+  background-color: rgba(114, 47, 55, 0.95);
   color: white;
 }
 
 .refreshBtn {
-  background-color: #007bff;
+  background-color: rgba(114, 47, 55, 0.95);
   color: white;
+}
+
+.donateBtn:hover,
+.refreshBtn:hover {
+  background: #c9302c;
 }
 
 /* Statistics Section */

@@ -47,7 +47,7 @@ const Donations = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDonations(response.data);
-    } catch (error) {
+    } catch (error) { 
       console.error("Error fetching donations:", error);
       alert("Failed to fetch donations: " + (error.response?.data?.message || error.message));
     } finally {
@@ -197,7 +197,7 @@ const Donations = () => {
           <button
             className={styles.refreshBtn}
             onClick={exportToCSV}
-            style={{ background: "#28a745" }}
+            style={{ background: "rgba(114, 47, 55, 0.95)" }}
           >
             Export CSV
           </button>
