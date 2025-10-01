@@ -33,9 +33,12 @@ function NavigationBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className={`ms-auto align-items-center ${styles.navContainer}`}>
+            {!isVet && (
             <Nav.Link as={Link} to="/overview" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
               <FaChartPie className="me-1"/> OverView
             </Nav.Link>
+            )}
+            
             {!isVet && (
             <Nav.Link as={Link} to="/products" className={`mx-3 d-flex align-items-center ${styles.navItem}`}>
               <FaShoppingCart className="me-1"/> Pet Shop

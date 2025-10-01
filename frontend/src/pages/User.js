@@ -1,105 +1,94 @@
-import React, { useState, useEffect } from "react";
-import styles from "./user.module.css";
-import API from "../services/api";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import styles from './user.module.css'; // CSS Module import
 
 function User() {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState([]);
-  const [showCheckoutForm, setShowCheckoutForm] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await API.get("/products");
-        setProducts(res.data);
+        const response = await axios.get('http://localhost:3000/products', {
+          headers: { 'Cache-Control': 'no-cache' },
+        });
+        setProducts(response.data);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error('Error fetching products:', error);
       }
     };
-
     fetchProducts();
+
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) setCart(JSON.parse(savedCart));
   }, []);
 
   const addToCart = (productId) => {
     const product = products.find((p) => p._id === productId);
-    if (product) {
-      setCart([...cart, product]);
-      alert(`${product.name} added to cart! (${cart.length + 1} items)`);
+    if (!product) return;
+
+    const existingItem = cart.find((item) => item._id === product._id);
+    let newCart;
+    if (existingItem) {
+      newCart = cart.map((item) =>
+        item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
+      );
+    } else {
+      newCart = [
+        ...cart,
+        {
+          _id: product._id,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          image: product.image,
+          quantity: 1,
+        },
+      ];
     }
-  };
 
-  const showCheckout = () => {
-    setShowCheckoutForm(true);
-    const total = cart.reduce((sum, item) => sum + item.price, 0);
-    alert(`Cart Total: $${total.toFixed(2)}\nProceed to checkout with the form.`);
-  };
-
-  const hideCheckout = () => setShowCheckoutForm(false);
-
-  const completePurchase = () => {
-    alert("Purchase completed! Thank you for shopping at Pawfect Home.");
-    setCart([]);
-    hideCheckout();
+    setCart(newCart);
+    localStorage.setItem('cart', JSON.stringify(newCart));
+    alert(`${product.name} added to cart!`);
   };
 
   return (
-    <div>
-      <div className={styles.mainContent}>
-        <div className={styles.container}>
-          <h2 className={styles.heading}>Pet Shop</h2>
-          <div className={styles.productGrid}>
-            {products.length > 0 ? (
-              products.map((product) => (
-                <div key={product._id} className={styles.productCard}>
-                  <img
-                    src={product.image || "https://placehold.co/150x150"}
-                    alt={product.name}
-                    onError={(e) => (e.target.src = "https://placehold.co/150x150")}
-                  />
-                  <h3>{product.name}</h3>
-                  <p>{product.description || "No description available"}</p>
-                  <p>
-                    <strong>${product.price ? product.price.toFixed(2) : "N/A"}</strong>
-                  </p>
-                  <button className={styles.addToCart} onClick={() => addToCart(product._id)}>
-                    Add to Cart
-                  </button>
-                </div>
-              ))
-            ) : (
-              <p>Loading products or no products available...</p>
-            )}
-          </div>
+    <div className={styles.userContainer}>
+      {/* Main Content */}
+      <main className={styles.mainContent}>
+        <h2 className={styles.heading}>Pet Shop</h2>
 
-          <button className={styles.cartBtn} onClick={showCheckout}>
+        <div className={styles.productGrid}>
+          {products.length > 0 ? (
+            products.map((p) => (
+              <div key={p._id} className={styles.productCard}>
+                <img
+                  src={p.image || 'https://placehold.co/150x150'}
+                  alt={p.name}
+                  onError={(e) => { e.target.src = 'https://placehold.co/150x150'; }}
+                />
+                <h3>{p.name}</h3>
+                <p>{p.description || 'No description available'}</p>
+                <p><strong>${p.price ? p.price.toFixed(2) : 'N/A'}</strong></p>
+                <button onClick={() => addToCart(p._id)} className={styles.addBtn}>
+                  Add to Cart
+                </button>
+              </div>
+            ))
+          ) : (
+            <p>Loading products…</p>
+          )}
+        </div>
+
+        {/* Centered View Cart & Checkout Button */}
+        <div className={styles.cartActions}>
+          <button className={styles.cartBtn} onClick={() => navigate('/Viewcart')}>
             View Cart & Checkout
           </button>
-
-          {showCheckoutForm && (
-            <div className={styles.checkoutForm}>
-              <h3>Checkout</h3>
-              <label htmlFor="name">Full Name:</label>
-              <input type="text" id="name" required />
-              <label htmlFor="address">Shipping Address:</label>
-              <input type="text" id="address" required />
-              <label htmlFor="payment">Payment Method:</label>
-              <select id="payment" required>
-                <option value="">Select</option>
-                <option value="credit">Credit Card</option>
-                <option value="paypal">PayPal</option>
-              </select>
-              <button onClick={completePurchase}>Complete Purchase</button>
-              <button onClick={hideCheckout}>Cancel</button>
-            </div>
-          )}
-
-          <div className={styles.recommendations}>
-            <h3>Recommended Products</h3>
-            <p>Based on popularity: Flea Treatment Spray ($15.99)</p>
-            <p>Recently added: Pet Vitamin Supplement ($10.99)</p>
-          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

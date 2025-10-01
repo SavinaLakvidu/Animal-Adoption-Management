@@ -21,6 +21,7 @@ import MedicalRecordDetail from "./pages/MedicalRecordDetail.js";
 import Donations from "./pages/Donations.js";
 import Volunteers from "./pages/Volunteers.js";
 import Overview from './pages/Overview.js';
+import ViewCart from "./pages/ViewCart.js"
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/donations" element={<Donations />} />
           <Route path="/volunteers" element={<Volunteers />} />
           <Route path="/overview" element={<Overview/>} />
+          <Route path="/Viewcart" element={<ViewCart/>} />
 
           <Route
             path="/admin/*"

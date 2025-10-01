@@ -9,6 +9,7 @@ const UpdateProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState({ name: '', description: '', price: '', imageUrl: '' });
+  const [errors, setErrors] = useState({});
   const [file, setFile] = useState(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
@@ -17,7 +18,6 @@ const UpdateProduct = () => {
 
   // Fetch product by ID
   useEffect(() => {
-    console.log("UpdateProduct component mounted, id:", id);
     if (!id) return;
 
     const fetchProduct = async () => {
@@ -40,6 +40,7 @@ const UpdateProduct = () => {
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setProduct(prev => ({ ...prev, [id]: value }));
+    setErrors(prev => ({ ...prev, [id]: '' })); // clear field error
   };
 
   const handleSupabaseUpload = async () => {
@@ -80,9 +81,42 @@ const UpdateProduct = () => {
     }
   };
 
+  // ✅ Validation
+  const validateProduct = () => {
+    const newErrors = {};
+
+    if (!product.name.trim()) {
+      newErrors.name = "Product name is required.";
+    } else if (product.name.trim().length < 2) {
+      newErrors.name = "Product name must be at least 2 characters.";
+    }
+
+    if (!product.description.trim()) {
+      newErrors.description = "Description is required.";
+    } else if (product.description.trim().length < 10) {
+      newErrors.description = "Description must be at least 10 characters.";
+    }
+
+    if (!product.price) {
+      newErrors.price = "Price is required.";
+    } else {
+      const priceValue = parseFloat(product.price);
+      if (isNaN(priceValue) || priceValue <= 0) {
+        newErrors.price = "Price must be a valid positive number.";
+      }
+    }
+
+    if (product.imageUrl && !/^https?:\/\/.+\.(jpg|jpeg|png)$/i.test(product.imageUrl)) {
+      newErrors.imageUrl = "Image must be a valid URL ending with .jpg, .jpeg, or .png";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleUpdateProduct = async () => {
-    if (!product.name || !product.price || !product.description) {
-      setToastMessage('Please fill all required fields.');
+    if (!validateProduct()) {
+      setToastMessage("Please fix validation errors.");
       setToastVariant("danger");
       setShowToast(true);
       return;
@@ -124,17 +158,37 @@ const UpdateProduct = () => {
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
               <label htmlFor="name">Product Name:</label>
-              <input type="text" id="name" value={product.name} onChange={handleInputChange} />
+              <input
+                type="text"
+                id="name"
+                value={product.name}
+                onChange={handleInputChange}
+                className={errors.name ? styles.inputError : ''}
+              />
+              {errors.name && <p className={styles.errorMessage}>{errors.name}</p>}
             </div>
             <div className={styles.formGroup}>
               <label htmlFor="price">Price:</label>
-              <input type="number" id="price" value={product.price} onChange={handleInputChange} />
+              <input
+                type="number"
+                id="price"
+                value={product.price}
+                onChange={handleInputChange}
+                className={errors.price ? styles.inputError : ''}
+              />
+              {errors.price && <p className={styles.errorMessage}>{errors.price}</p>}
             </div>
           </div>
 
           <div className={styles.formGroup}>
             <label htmlFor="description">Description:</label>
-            <textarea id="description" value={product.description} onChange={handleInputChange}></textarea>
+            <textarea
+              id="description"
+              value={product.description}
+              onChange={handleInputChange}
+              className={errors.description ? styles.inputError : ''}
+            ></textarea>
+            {errors.description && <p className={styles.errorMessage}>{errors.description}</p>}
           </div>
 
           <div className={styles.formGroup}>
@@ -148,6 +202,7 @@ const UpdateProduct = () => {
                 Current Image: <a href={product.imageUrl} target="_blank" rel="noopener noreferrer">View Image</a>
               </p>
             )}
+            {errors.imageUrl && <p className={styles.errorMessage}>{errors.imageUrl}</p>}
           </div>
 
           <div className={styles.buttonGroup}>

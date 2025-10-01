@@ -118,3 +118,18 @@
     gap: 0;
   }
 }
+
+
+.errorMessage {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.inputError {
+  border: 1px solid red;
+  outline: none;
+  background-color: #fff5f5;
+  border-radius: 6px;
+}
