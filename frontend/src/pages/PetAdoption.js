@@ -39,122 +39,148 @@ function PetAdoption() {
     }
   }, [isLoggedIn]);
 
-  const fetchPets = () => {
-    API.get("/pet-profiles", { params: { userRole: user?.role || "USER" } })
-      .then((res) => setPets(Array.isArray(res.data) ? res.data : []))
-      .catch((err) => console.error(err));
-  };
+useEffect(() => {
+  fetchPets();
+  if (isLoggedIn) {
+    fetchMyForms();
+  }
+}, [isLoggedIn]);
 
-  const fetchMyForms = () => {
-    if (!isLoggedIn) return;
+const fetchPets = () => {
+  API.get("/pet-profiles", {
+    params: { userRole: user?.role || "USER" },
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
+    .then((res) => setPets(Array.isArray(res.data) ? res.data : []))
+    .catch((err) => console.error(err));
+};
 
-    API.get("/adoption-forms")
-      .then((res) => {
-        console.log("Fetched adoption forms:", res.data);
-        setMyForms(Array.isArray(res.data) ? res.data : []);
-      })
-      .catch((err) => {
-        console.error("Error fetching adoption forms:", err);
-        if (err.response?.status !== 401) {
-          // Don't show error for 401 as it's handled by interceptor
-          alert("Error fetching your adoption requests. Please try again.");
-        }
-      });
-  };
+const fetchMyForms = () => {
+  if (!isLoggedIn) return;
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const openAdoptionForm = (pet) => {
-    if (!isLoggedIn) {
-      alert("Please log in to submit an adoption request.");
-      return;
-    }
-    setSelectedPet(pet);
-    setFormData({
-      adopterName: user?.name || "",
-      adopterEmail: user?.email || "",
-      adopterPhone: "",
-      adopterAddress: "",
-      reasonForAdoption: "",
-      homeType: "House",
-      hasYard: false,
-      otherPets: "",
-      experience: "",
+  API.get("/adoption-forms", {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
+    .then((res) => {
+      console.log("Fetched adoption forms:", res.data);
+      setMyForms(Array.isArray(res.data) ? res.data : []);
+    })
+    .catch((err) => {
+      console.error("Error fetching adoption forms:", err);
+      if (err.response?.status !== 401) {
+        alert("Error fetching your adoption requests. Please try again.");
+      }
     });
-    setIsFormOpen(true);
-  };
+};
 
-  const submitAdoptionForm = async (e) => {
-    e.preventDefault();
+const handleInputChange = (e) => {
+  const { name, value, type, checked } = e.target;
+  setFormData((prev) => ({
+    ...prev,
+    [name]: type === "checkbox" ? checked : value,
+  }));
+};
 
-    // Check if user is still logged in
-    if (!isLoggedIn) {
-      alert("Please log in to submit an adoption request.");
-      return;
-    }
+const openAdoptionForm = (pet) => {
+  if (!isLoggedIn) {
+    alert("Please log in to submit an adoption request.");
+    return;
+  }
+  setSelectedPet(pet);
+  setFormData({
+    adopterName: user?.name || "",
+    adopterEmail: user?.email || "",
+    adopterPhone: "",
+    adopterAddress: "",
+    reasonForAdoption: "",
+    homeType: "House",
+    hasYard: false,
+    otherPets: "",
+    experience: "",
+  });
+  setIsFormOpen(true);
+};
 
-    try {
-      const response = await API.post("/adoption-forms", {
+const submitAdoptionForm = async (e) => {
+  e.preventDefault();
+
+  if (!isLoggedIn) {
+    alert("Please log in to submit an adoption request.");
+    return;
+  }
+
+  try {
+    const response = await API.post(
+      "/adoption-forms",
+      {
         ...formData,
         petId: selectedPet._id,
-      });
-
-      console.log("Adoption form submitted successfully:", response.data);
-      alert("Adoption request submitted successfully!");
-      setIsFormOpen(false);
-      fetchMyForms();
-    } catch (error) {
-      console.error("Error submitting adoption request:", error);
-
-      if (error.response?.status === 401) {
-        alert("Your session has expired. Please log in again.");
-        // The interceptor will handle redirect to login
-      } else {
-        alert(
-          "Error submitting adoption request: " +
-          (error.response?.data?.message || error.message)
-        );
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }
-    }
-  };
+    );
 
-  const cancelAdoptionRequest = async (formId) => {
-    if (
-      !window.confirm(
-        "Are you sure you want to cancel this adoption request?"
-      )
-    )
-      return;
-    try {
-      await API.delete(`/adoption-forms/${formId}`);
-      alert("Adoption request cancelled successfully!");
-      fetchMyForms();
-    } catch (error) {
+    console.log("Adoption form submitted successfully:", response.data);
+    alert("Adoption request submitted successfully!");
+    setIsFormOpen(false);
+    fetchMyForms();
+  } catch (error) {
+    console.error("Error submitting adoption request:", error);
+
+    if (error.response?.status === 401) {
+      alert("Your session has expired. Please log in again.");
+    } else {
       alert(
-        "Error cancelling request: " +
-        (error.response?.data?.message || error.message)
+        "Error submitting adoption request: " +
+          (error.response?.data?.message || error.message)
       );
     }
-  };
+  }
+};
 
-  const openPetDetails = async (pet) => {
-    try {
-      const res = await API.get(`/pet-profiles/${pet._id}`, {
-        params: { userRole: user?.role || "USER" }
-      });
-      setViewPetDetails(res.data);
-      setIsDetailsOpen(true);
-    } catch (error) {
-      console.error("Error fetching pet details:", error);
-      alert("Failed to load pet details");
-    }
-  };
+const cancelAdoptionRequest = async (formId) => {
+  if (
+    !window.confirm("Are you sure you want to cancel this adoption request?")
+  )
+    return;
+  try {
+    await API.delete(`/adoption-forms/${formId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    alert("Adoption request cancelled successfully!");
+    fetchMyForms();
+  } catch (error) {
+    alert(
+      "Error cancelling request: " +
+        (error.response?.data?.message || error.message)
+    );
+  }
+};
+
+const openPetDetails = async (pet) => {
+  try {
+    const res = await API.get(`/pet-profiles/${pet._id}`, {
+      params: { userRole: user?.role || "USER" },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    setViewPetDetails(res.data);
+    setIsDetailsOpen(true);
+  } catch (error) {
+    console.error("Error fetching pet details:", error);
+    alert("Failed to load pet details");
+  }
+};
 
   // 1) Filter by search text only
   const baseSearchPets = (pets || []).filter((pet) => {

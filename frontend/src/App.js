@@ -21,7 +21,7 @@ import MedicalRecordDetail from "./pages/MedicalRecordDetail.js";
 import Donations from "./pages/Donations.js";
 import Volunteers from "./pages/Volunteers.js";
 import Overview from './pages/Overview.js';
-import ViewCart from "./pages/ViewCart.js"
+import ViewCart from "./pages/ViewCart.js";
 
 function App() {
   return (

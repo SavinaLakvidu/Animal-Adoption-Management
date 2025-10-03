@@ -23,6 +23,6 @@ router.get("/:id", authenticate, getAdoptionFormByIdController);
 router.put("/:id", authenticate, authorizeRoles("admin"), updateAdoptionFormController);
 
 // Delete adoption form (admin only)
-router.delete("/:id", authenticate, authorizeRoles("admin"), deleteAdoptionFormController);
+router.delete("/:id", authenticate, deleteAdoptionFormController);
 
 export default router;
