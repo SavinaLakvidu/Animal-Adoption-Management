@@ -23,7 +23,13 @@ const AdoptionRequests = () => {
   const fetchRequests = async () => {
     try {
       setLoading(true);
-      const response = await API.get("/adoption-forms");
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("User not authenticated");
+
+      const response = await API.get("/adoption-forms",{
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
       setRequests(response.data);
     } catch (error) {
       console.error("Error fetching adoption requests:", error);
@@ -41,8 +47,11 @@ const AdoptionRequests = () => {
         reviewedBy: user.id,
         reviewedAt: new Date(),
       };
-
-      await API.put(`/adoption-forms/${requestId}`, updateData);
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("User not authenticated");
+      await API.put(`/adoption-forms/${requestId}`, updateData,{
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       // Update the local state
       setRequests(

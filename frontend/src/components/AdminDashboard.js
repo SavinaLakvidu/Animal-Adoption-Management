@@ -8,7 +8,8 @@ import UpdateProduct from "../pages/UpdateProduct";
 import Donations from "../pages/Donations"
 import Volunteers from "../pages/Volunteers"
 import VolunteersReq from "../pages/VolunteerReq";
-import DonationsReq from "../pages/DonationsReq"
+import DonationsReq from "../pages/DonationsReq";
+import AdoptionRequests from "../pages/AdoptionRequests";
 
 function AdminDashboard() {
   const location = useLocation();
@@ -29,6 +30,11 @@ function AdminDashboard() {
         <Link to="/admin/edit-product">
           <button className={location.pathname === "/admin/edit-product" ? styles.active : ""}>
             Add New Products
+          </button>
+        </Link>
+        <Link to="/admin/adoption-requests">
+          <button className={location.pathname === "/admin/adoption-requests" ? styles.active : ""}>
+            Adoption Requests
           </button>
         </Link>
         <Link to="/admin/volunteersReq">
@@ -52,6 +58,7 @@ function AdminDashboard() {
           <Route path="update-product/:id" element={<UpdateProduct />} />
           <Route path="donations" element={<Donations />} />
           <Route path="volunteers" element={<Volunteers />} />
+          <Route path="adoption-requests" element={<AdoptionRequests />} />
           <Route path="volunteersReq" element={<VolunteersReq />} />
           <Route path="DonationsReq" element={<DonationsReq />} />
         </Routes>

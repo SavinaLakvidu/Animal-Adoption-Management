@@ -20,7 +20,7 @@ router.get("/", authenticate, getAdoptionFormsController);
 router.get("/:id", authenticate, getAdoptionFormByIdController);
 
 // Update adoption form (admin only)
-router.put("/:id", authenticate, authorizeRoles("admin"), updateAdoptionFormController);
+router.put("/:id", authenticate, authorizeRoles("ADMIN"), updateAdoptionFormController);
 
 // Delete adoption form (admin only)
 router.delete("/:id", authenticate, deleteAdoptionFormController);

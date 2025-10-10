@@ -50,6 +50,11 @@ function AppointmentPage() {
       return;
     }
 
+    if (!form.phoneNumber || form.phoneNumber.length < 10) {
+      alert("Invalid phone number. Must contain at least 10 digits.");
+      return;
+    }
+
     try {
       const payload = {
         fullName: form.fullName,
